@@ -108,7 +108,8 @@ const AllFoodsScreen = () => {
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#ffa800' : '#ffa800'} />
-            <View style={styles.sliderContainer}>
+            <ScrollView style={styles.sliderContainer}>
+
                 <View style={styles.view1}>
                     <View style={styles.textInputView}>
                         <Icon style={styles.textInputViewIcon}
@@ -126,6 +127,7 @@ const AllFoodsScreen = () => {
                         </TextInput>
                     </View>
                 </View>
+
                 <View style={styles.view2}>
                     <View style={styles.view3}>
                         <View style={styles.locationBox}>
@@ -140,7 +142,8 @@ const AllFoodsScreen = () => {
                         </View>
                     </View>
                 </View>
-                <ScrollView>
+
+                <View>
                     <FlatList style={styles.listStaus}
                         data={listCategory}
                         renderItem={renderItem}
@@ -149,24 +152,23 @@ const AllFoodsScreen = () => {
                         horizontal
                         showsHorizontalScrollIndicator={false}>
                     </FlatList>
+                </View>
 
-                    <View style={styles.filterResultBox}>
-                        <View style={styles.resFilterTextBox}>
-                            <Text style={styles.resFilterText}>{selectedCategoryId}</Text>
-                        </View>
-                        <FlatList
-                            data={foodList}
-                            renderItem={renderFoods}
-
-                            vertical
-                            showsVerticalScrollIndicator={false}>
-                        </FlatList>
-
-
-
+                <View style={styles.filterResultBox}>
+                    <View style={styles.resFilterTextBox}>
+                        <Text style={styles.resFilterText}>{selectedCategoryId}</Text>
                     </View>
-                </ScrollView>
-            </View>
+                    <FlatList
+                        data={foodList}
+                        renderItem={renderFoods}
+
+                        vertical
+                        showsVerticalScrollIndicator={false}>
+                    </FlatList>
+
+                </View>
+
+            </ScrollView>
         </View>
     );
 };
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     },
     sliderContainer: {
         flex: 1,
-        alignItems: 'center'
+
     },
     view1: {
         backgroundColor: '#ffa800',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,12 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {SwipeListView} from 'react-native-swipe-list-view';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Notifications from '../model/Notifications';
 
-const NotificationScreen = ({navigation}) => {
+const NotificationScreen = ({ navigation }) => {
   const [listData, setListData] = useState(
     Notifications.map((NotificationItem, index) => ({
       key: `${index}`,
@@ -78,7 +78,7 @@ const NotificationScreen = ({navigation}) => {
 
     return (
       <Animated.View
-        style={[styles.rowFront, {height: rowHeightAnimatedValue}]}>
+        style={[styles.rowFront, { height: rowHeightAnimatedValue }]}>
         <TouchableHighlight
           style={styles.rowFrontVisible}
           onPress={() => console.log('Element touched')}
@@ -132,7 +132,7 @@ const NotificationScreen = ({navigation}) => {
     }
 
     return (
-      <Animated.View style={[styles.rowBack, {height: rowHeightAnimatedValue}]}>
+      <Animated.View style={[styles.rowBack, { height: rowHeightAnimatedValue }]}>
         <Text>Left</Text>
         {!leftActionActivated && (
           <TouchableOpacity
@@ -205,7 +205,7 @@ const NotificationScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content"/>
+      <StatusBar barStyle="dark-content" />
       {/* <StatusBar backgroundColor="#FF6347" barStyle="light-content"/> */}
       <SwipeListView
         data={listData}
@@ -240,19 +240,19 @@ const styles = StyleSheet.create({
   },
   rowFront: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
+    borderRadius: 20,
     height: 60,
     margin: 5,
     marginBottom: 15,
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
   },
   rowFrontVisible: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
+    borderRadius: 20,
     height: 60,
     padding: 10,
     marginBottom: 15,
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     margin: 5,
     marginBottom: 15,
-    borderRadius: 5,
+    borderRadius: 20,
   },
   backRightBtn: {
     alignItems: 'flex-end',
@@ -284,8 +284,8 @@ const styles = StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: 'red',
     right: 0,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
   },
   trash: {
     height: 25,

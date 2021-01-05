@@ -13,6 +13,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from './HomeScreen';
 import NotificationScreen from './NotificationScreen';
 import AllFoodsScreen from './AllFoodsScreen';
+import AllBillsScreen from './AllBillsScreen';
 import ExploreScreen from './ExploreScreen';
 import ProfileScreen from './ProfileScreen';
 import MapTestScreen from './MapTestScreen';
@@ -29,6 +30,7 @@ import CartScreen from './CartScreen';
 const HomeStack = createStackNavigator();
 const NotificationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const BillsStack = createStackNavigator();
 const AllFoodsStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
@@ -92,7 +94,7 @@ const MainTabScreen = () => {
       />
       <Tab.Screen
         name="Bills"
-        component={ExploreScreen}
+        component={BillsStackScreen}
         options={{
           tabBarLabel: 'Bills',
           tabBarColor: '#d02860',
@@ -375,6 +377,61 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
       />
     </AllFoodsStack.Navigator>
   )
+};
+
+const BillsStackScreen = ({ navigation }) => {
+  const { colors } = useTheme();
+
+  return (
+    <BillsStack.Navigator
+      screenOptions={(route) => ({
+        headerStyle: {
+          backgroundColor: colors.background,
+          shadowColor: colors.background, // iOS
+          elevation: 0, // Android
+        },
+        headerTintColor: colors.text,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      })}>
+      <BillsStack.Screen
+        name="All Bills"
+        component={AllBillsScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: '#d02860',
+            shadowColor: '#d02860', // iOS
+            elevation: 0, // Android
+          },
+          title: 'All Bill',
+          headerTitleStyle: {
+            fontSize: 20,
+            color: colors.backgroundWhite
+          },
+          headerTitleAlign: 'center',
+
+          activeTintColor: '#ffffff',
+          headerLeft: () => (
+            <TouchableOpacity style={{
+              marginLeft: 25,
+              justifyContent: 'center'
+            }}>
+              <Icon
+                name="ios-menu"
+                size={40}
+                color={colors.backgroundWhite}
+
+                onPress={() => navigation.openDrawer()}
+              />
+            </TouchableOpacity>
+
+          ),
+        }} />
+
+
+    </BillsStack.Navigator>
+  );
 };
 
 const ProfileStackScreen = ({ navigation }) => {

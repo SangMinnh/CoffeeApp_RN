@@ -116,8 +116,48 @@ export const Foods = [
 
 export const FoodsCart = {
   idCart: 1,
-  totalPrice: 50,
-  tableNumber: 2
+  totalPrice: 0,
+  tableNumber: 1,
+  listItem: [
+    {
+      idCart: '1',
+      id: '1f',
+      price: 5,
+      title: 'Chocolate',
+      amount: 1
+    },
+    {
+      idCart: '1',
+      id: '2f',
+      price: 2,
+      title: 'Caffè Americano',
+      amount: 1
+
+    },
+    {
+      idCart: '1',
+      id: '3f',
+      price: 1,
+      title: 'Cappuccino',
+      amount: 1
+
+    },
+    {
+      idCart: '1',
+      id: '4f',
+      price: 7,
+      title: 'Caffè Latte',
+      amount: 1
+
+    },
+    {
+      idCart: '1',
+      id: '5f',
+      price: 4,
+      title: 'Berry Trio',
+      amount: 1
+    },
+  ],
 };
 
 export const CartDetail = [
