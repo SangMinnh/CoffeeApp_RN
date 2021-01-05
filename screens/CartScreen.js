@@ -58,7 +58,7 @@ export default function CartScreen() {
 
         function handleDelete() {
             // console.log("----FoodCartNow-------", foodCartNow)
-            let total = foodCartNow.totalPrice - itemState.price;
+            let total = foodCartNow.totalPrice - itemState.price * itemState.amount;
             // const index = cartItemList.findIndex(x => x.id === item.id);
             //if (index < 0) return;
             const newCartItemList = [...cartItemList];
