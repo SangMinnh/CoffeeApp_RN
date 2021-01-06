@@ -4,13 +4,14 @@ const W = Dimensions.get('window').width;
 import { FoodsCart } from '../model/data';
 
 import { useIsFocused } from '@react-navigation/native';
-import { useTheme } from 'react-native-paper';
+import { TextInput, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-share';
 
-
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
 
 
 
@@ -23,6 +24,8 @@ function FocusAwareStatusBar(props) {
 
 
 export default function CartScreen() {
+
+
 
     const CartItem = ({ item, index }) => {
         const [itemState, setItemState] = useState(() => {
@@ -101,7 +104,7 @@ export default function CartScreen() {
                 </View>
                 <View style={styles.edit}>
                     <TouchableOpacity onPress={() => handleDelete()}>
-                        <Icon name='ios-trash' color='#FF6347' size={30} ></Icon>
+                        <Icon name='ios-close' color='#FF6347' size={30} ></Icon>
                     </TouchableOpacity>
 
                 </View>
@@ -130,13 +133,52 @@ export default function CartScreen() {
 
     function handleConfirmOrder() {
         // FoodsCart = { ...foodCartNow };
-        console.log(FoodsCart);
+        console.log(foodCartNow);
     }
+    const bs = React.useRef(null);
+    const fall = new Animated.Value(1);
+    const renderInner = () => (
+        <View style={styles.Total}>
+            <View style={styles.Total1}>
+                <Text style={styles.TotalText1}>Item Total</Text>
+                <Text style={styles.TotalText1}>${foodCartNow.totalPrice}</Text>
+            </View>
+            <View style={styles.Total1}>
+                <Text style={styles.TotalText1}>Discount</Text>
+                <Text style={styles.TotalText1}>$0</Text>
+            </View>
+            <View style={styles.Total1}>
+                <Text style={styles.TotalText2}>Total</Text>
+                <Text style={styles.TotalText2}>${foodCartNow.totalPrice}</Text>
+            </View>
+            <TouchableOpacity style={styles.confirmBtn}>
+                <Text style={styles.confirmText}>Confirm Order</Text>
+            </TouchableOpacity>
+        </View>
+    );
+    const renderHeader = () => (
+        <View style={styles.header}>
+            <View style={styles.panelHeader}>
+                <View style={styles.panelHandle} />
+            </View>
+        </View>
+    );
+
     return (
         <View style={styles.container}>
-            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#ffa800' : '#ffa800'} />
-            <ScrollView style={{ paddingTop: 25 }}>
+            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#333333' : '#f6f6f6'} />
+            <BottomSheet
+                ref={bs}
+                snapPoints={[200, 40]}
+                renderContent={renderInner}
+                renderHeader={renderHeader}
+                initialSnap={1}
+                callbackNode={fall}
+                enabledGestureInteraction={true}
+            />
+            <ScrollView >
                 <View>
+                    <Text style={styles.textOderList}>Order List</Text>
                     <FlatList
                         data={cartItemList}
                         renderItem={renderCartItem}
@@ -148,23 +190,8 @@ export default function CartScreen() {
 
 
             </ScrollView>
-            <View style={styles.Total}>
-                <View style={styles.Total1}>
-                    <Text style={styles.TotalText1}>Item Total</Text>
-                    <Text style={styles.TotalText1}>${foodCartNow.totalPrice}</Text>
-                </View>
-                <View style={styles.Total1}>
-                    <Text style={styles.TotalText1}>Discount</Text>
-                    <Text style={styles.TotalText1}>$0</Text>
-                </View>
-                <View style={styles.Total1}>
-                    <Text style={styles.TotalText2}>Total</Text>
-                    <Text style={styles.TotalText2}>${foodCartNow.totalPrice}</Text>
-                </View>
-                <TouchableOpacity style={styles.confirmBtn} onPress={() => handleConfirmOrder()}>
-                    <Text style={styles.confirmText}>Confirm Order</Text>
-                </TouchableOpacity>
-            </View>
+            <View style={{ width: W, height: 40 }} />
+
 
 
         </View>
@@ -216,6 +243,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
 
     },
+    textOderList: {
+        fontSize: 18,
+        marginVertical: 10,
+        color: '#373737',
+        //fontWeight: 'bold',
+        marginLeft: 25
+
+    },
     nameCategory: {
         fontSize: 14,
         paddingVertical: 3,
@@ -244,8 +279,9 @@ const styles = StyleSheet.create({
     },
     edit: {
         justifyContent: 'space-evenly',
-        marginRight: 10,
+        // paddingHorizontal: 15,
 
+        marginRight: 15
     },
     priceText: {
         fontSize: 15,
@@ -254,11 +290,7 @@ const styles = StyleSheet.create({
         color: '#373737'
     },
     Total: {
-
-        paddingTop: 25,
         backgroundColor: '#ffa800',
-        borderTopRightRadius: 40,
-        borderTopLeftRadius: 40
     },
     Total1: {
         flexDirection: 'row',
@@ -291,7 +323,28 @@ const styles = StyleSheet.create({
         color: '#373737',
         alignSelf: 'center',
         fontWeight: 'bold'
-    }
+    },
+    header: {
+        backgroundColor: '#FFa800',
+        shadowColor: '#333333',
+        shadowOffset: { width: -1, height: -3 },
+        shadowRadius: 2,
+        shadowOpacity: 0.4,
+        // elevation: 5,
+        paddingTop: 20,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+    },
+    panelHeader: {
+        alignItems: 'center',
+    },
+    panelHandle: {
+        width: 60,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#00000040',
+        marginBottom: 10,
+    },
 
 
 });

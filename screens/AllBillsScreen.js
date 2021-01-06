@@ -14,12 +14,44 @@ function FocusAwareStatusBar(props) {
     return isFocused ? <StatusBar {...props} /> : null;
 }
 
+const BillView = ({ item, index }) => {
+    return (
+        <TouchableOpacity style={styles.billBox}>
+
+            <View style={styles.numberBox}>
+                <Text style={styles.tableNumberText}>55</Text>
+            </View>
+            <View style={styles.boxTotal}>
+                <Text style={styles.textTotalBill}>Total Bill</Text>
+                <Text style={styles.textTotalNumber}>$87</Text>
+            </View>
+            <View style={styles.boxTotal}>
+                <Text style={styles.textStatus}>Status</Text>
+                <Text style={styles.textStatusIs}>Unpaid</Text>
+            </View>
+        </TouchableOpacity>
+    );
+}
+
 const AllBillsScreen = () => {
+
     const { colors } = useTheme();
 
     return (
         <View style={styles.container}>
-            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#d02860' : '#d02860'} />
+            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#333333' : '#f6f6f6'} />
+            <ScrollView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+                <BillView></BillView>
+            </ScrollView>
+
         </View>
     );
 }
@@ -29,4 +61,51 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    billBox: {
+        flexDirection: 'row',
+        backgroundColor: '#f8d8e3',
+        borderRadius: 15,
+        marginHorizontal: 25,
+        marginBottom: 25,
+        padding: 10
+    },
+    numberBox: {
+        width: W * 0.2,
+        height: W * 0.2,
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: '#d02860',
+        backgroundColor: '#fff',
+        justifyContent: 'center'
+    },
+    tableNumberText: {
+        alignSelf: 'center',
+        fontSize: 35,
+        color: '#d02860'
+    },
+    boxTotal: {
+        justifyContent: 'center',
+        marginHorizontal: 25
+    },
+    textTotalBill: {
+        fontSize: 17,
+        color: '#d02860',
+
+    },
+    textTotalNumber: {
+        fontSize: 22,
+        color: '#d02860',
+        fontWeight: 'bold'
+    },
+    textStatus: {
+        fontSize: 17,
+        color: '#d02860',
+    },
+    textStatusIs: {
+        fontSize: 22,
+        color: '#d02860',
+        fontWeight: 'bold'
+    }
+
+
 })

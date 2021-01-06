@@ -38,24 +38,29 @@ const MainTabScreen = () => {
   const { colors } = useTheme();
   return (
     <Tab.Navigator initialRouteName="Home"
-      tabBarOptions={{
-        activeTintColor: '#FFD200',
-        inactiveTintColor: '#FFD200',
+      //labeled={false}
+      activeTintColor='#27dd06'
+      inactiveTintColor='#FFD200'
+    // tabBarOptions={{
 
-        // activeBackgroundColor: 'tomato',
-        // inactiveBackgroundColor: 'white',
-        showLabel: false,
-        labelStyle:
-        {
-          fontSize: 10
-        },
-        safeAreaInsets:
-        {
-          bottom: 10,
 
-        }
+    //   // activeBackgroundColor: 'tomato',
+    //   // inactiveBackgroundColor: 'white',
+    //   showLabel: false,
+    //   labelStyle:
+    //   {
+    //     fontSize: 10
+    //   },
+    //   safeAreaInsets:
+    //   {
+    //     bottom: 10,
 
-      }}>
+    //   },
+    //   paddingBottom: 50
+
+
+    // }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeStackScreen}
@@ -63,6 +68,7 @@ const MainTabScreen = () => {
           tabBarLabel: 'Home',
           showLabel: false,
           tabBarColor: '#FF6347',
+          //tabBarColor: '#fff',
           tabBarIcon: ({ color }) => (
             <Icon name='ios-home' color={color} size={28} />
           ),
@@ -75,6 +81,7 @@ const MainTabScreen = () => {
           tabBarBadge: 16,
           tabBarLabel: 'Updates',
           tabBarColor: '#1f65ff',
+          //tabBarColor: '#fff',
           tabBarIcon: ({ color }) => (
             <Icon name='ios-notifications' color={color} size={28} />
           ),
@@ -85,10 +92,22 @@ const MainTabScreen = () => {
         component={AllFoodsStackScreen}
         showLabel={false}
         options={{
-          tabBarLabel: 'New',
+          tabBarLabel: '',
           tabBarColor: '#FFA800',
+          //tabBarColor: '#fff',
+
           tabBarIcon: ({ color }) => (
-            <Icon name='ios-add-circle-outline' color={color} size={28} />
+            // <View style={{
+            //   borderRadius: 50,
+            //   width: 42,
+            //   height: 42,
+            //   marginTop: -10,
+            //   backgroundColor: '#27dd06',
+            //   justifyContent: 'center'
+            // }}>
+
+            // </View>
+            <Icon style={{ alignSelf: 'center' }} name='ios-add-circle-outline' color={color} size={28} />
           ),
         }}
       />
@@ -98,8 +117,10 @@ const MainTabScreen = () => {
         options={{
           tabBarLabel: 'Bills',
           tabBarColor: '#d02860',
+          //tabBarColor: '#fff',
           tabBarIcon: ({ color }) => (
             <Icon name='ios-document' color={color} size={28} />
+            //tabBarColor: '#d02860',
           ),
         }}
       />
@@ -109,13 +130,14 @@ const MainTabScreen = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarColor: '#694fad',
+          // tabBarColor: '#fff',
           tabBarIcon: ({ color }) => (
             <Icon name='ios-person' color={color} size={28} />
           ),
         }}
       />
 
-    </Tab.Navigator>)
+    </Tab.Navigator >)
 };
 
 export default MainTabScreen;
@@ -212,43 +234,50 @@ const HomeStackScreen = ({ navigation }) => {
 
 
 
-const NotificationStackScreen = ({ navigation }) => (
-  <NotificationStack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: '#1f65ff',
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold',
+const NotificationStackScreen = ({ navigation }) => {
+  const { colors } = useTheme();
+  return (
+    <NotificationStack.Navigator
+      screenOptions={(route) => ({
+        headerStyle: {
+          backgroundColor: colors.background,
+          shadowColor: colors.background, // iOS
+          elevation: 0, // Android
+        },
+        headerTintColor: colors.text,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      })}>
+      <NotificationStack.Screen
+        name="Notifications"
+        component={NotificationScreen}
+        options={{
+          title: 'Notifications',
+          headerTitleStyle: {
+            fontSize: 20,
+            color: colors.text
+          },
+          headerTitleAlign: 'center',
+          headerLeft: () => (
 
-      },
-    }}>
-    <NotificationStack.Screen
-      name="Notifications"
-      component={NotificationScreen}
-      options={{
-        title: 'Notifications',
-        headerTitleAlign: 'center',
-        headerLeft: () => (
-
-          <TouchableOpacity style={{ marginLeft: 15 }}
-            onPress={() => navigation.openDrawer()}>
-            <Icon
-              name="ios-menu"
-              size={40}
-              backgroundColor="#1f65ff"
-              onPress={() => navigation.openDrawer()}
-            />
-          </TouchableOpacity>
+            <TouchableOpacity style={{ marginLeft: 15 }}
+              onPress={() => navigation.openDrawer()}>
+              <Icon
+                name="ios-menu"
+                size={40}
+                backgroundColor="#1f65ff"
+                onPress={() => navigation.openDrawer()}
+              />
+            </TouchableOpacity>
 
 
 
-        ),
-      }}
-    />
-  </NotificationStack.Navigator>
-);
+          ),
+        }}
+      />
+    </NotificationStack.Navigator>)
+};
 
 const AllFoodsStackScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
@@ -326,14 +355,14 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
         component={CartScreen}
         options={{
           headerStyle: {
-            backgroundColor: '#ffa800',
-            shadowColor: '#ffa800', // iOS
+            backgroundColor: colors.background,
+            shadowColor: colors.background, // iOS
             elevation: 0, // Android
           },
           title: 'Cart',
           headerTitleStyle: {
             fontSize: 20,
-            color: colors.backgroundWhite
+            color: colors.text
           },
           headerTitleAlign: 'center',
           activeTintColor: '#ffffff',
@@ -345,7 +374,7 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
               <Icon
                 name="ios-arrow-back"
                 size={40}
-                color={colors.backgroundWhite}
+                color={colors.text}
 
                 onPress={() => navigation.navigate('AllFoods')}
               />
@@ -400,14 +429,14 @@ const BillsStackScreen = ({ navigation }) => {
         component={AllBillsScreen}
         options={{
           headerStyle: {
-            backgroundColor: '#d02860',
-            shadowColor: '#d02860', // iOS
+            backgroundColor: colors.background,
+            shadowColor: colors.background, // iOS
             elevation: 0, // Android
           },
-          title: 'All Bill',
+          title: 'All Bills',
           headerTitleStyle: {
             fontSize: 20,
-            color: colors.backgroundWhite
+            color: colors.text
           },
           headerTitleAlign: 'center',
 
@@ -420,7 +449,7 @@ const BillsStackScreen = ({ navigation }) => {
               <Icon
                 name="ios-menu"
                 size={40}
-                color={colors.backgroundWhite}
+                color={colors.text}
 
                 onPress={() => navigation.openDrawer()}
               />
@@ -453,26 +482,32 @@ const ProfileStackScreen = ({ navigation }) => {
         options={{
           title: '',
           headerLeft: () => (
-            <View style={{ marginLeft: 10 }}>
-              <Icon.Button
+            <TouchableOpacity style={{
+              marginLeft: 25,
+              justifyContent: 'center'
+            }}>
+              <Icon
                 name="ios-menu"
-                size={25}
-                backgroundColor={colors.background}
+                size={40}
                 color={colors.text}
+
                 onPress={() => navigation.openDrawer()}
               />
-            </View>
+            </TouchableOpacity>
           ),
           headerRight: () => (
-            <View style={{ marginRight: 10 }}>
-              <MaterialCommunityIcons.Button
+            <TouchableOpacity style={{
+              marginRight: 25,
+              justifyContent: 'center'
+            }}>
+              <MaterialCommunityIcons
                 name="account-edit"
-                size={25}
+                size={32}
                 backgroundColor={colors.background}
                 color={colors.text}
                 onPress={() => navigation.navigate('EditProfile')}
               />
-            </View>
+            </TouchableOpacity>
           ),
         }}
       />

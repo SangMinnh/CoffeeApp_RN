@@ -6,6 +6,8 @@ import { Foods } from '../model/data';
 import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -115,7 +117,7 @@ const AllFoodsScreen = () => {
                         <Icon style={styles.textInputViewIcon}
                             name="ios-search"
                             color={colors.text}
-                            size={20}
+                            size={28}
                         />
                         <TextInput placeholder="Search here..."
                             placeholderTextColor="#666666"
@@ -132,7 +134,7 @@ const AllFoodsScreen = () => {
                     <View style={styles.view3}>
                         <View style={styles.locationBox}>
                             <View style={{ marginTop: 5 }}>
-                                <FontAwesome name='map-marker' color='#838383' size={32} ></FontAwesome>
+                                <Fontisto name='map-marker-alt' color='#373737' size={35} ></Fontisto>
                             </View>
 
                             <View style={{ marginLeft: 11 }}>
@@ -207,8 +209,8 @@ const styles = StyleSheet.create({
         marginLeft: 38,
     },
     locationText1: {
-        fontSize: 15,
-        fontWeight: 'bold',
+        fontSize: 17,
+        //fontWeight: 'bold',
         color: '#373737'
     },
     locationText2: {
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         marginHorizontal: 25,
         borderRadius: 15,
-        height: 50,
+        height: 55,
 
     },
     textInputViewIcon: {
@@ -240,6 +242,13 @@ const styles = StyleSheet.create({
     categoryStatusBox: {
         marginLeft: 25
     },
+    lol: {
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 15,
+        elevation: 3,
+    },
     categoryStatus: {
         backgroundColor: '#ff7000',
         justifyContent: 'center',
@@ -247,11 +256,7 @@ const styles = StyleSheet.create({
         width: 65,
         height: 65,
         borderRadius: 15,
-        shadowColor: '#999',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 15,
-        elevation: 3,
+
     },
     categoryTextStatus: {
         fontSize: 14,
@@ -280,11 +285,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 25,
         marginBottom: 25,
         justifyContent: 'space-between',
-        shadowColor: '#999',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 5,
+
     },
     foodImgDetail: {
         flexDirection: 'row',

@@ -116,6 +116,7 @@ export const Foods = [
 
 export const FoodsCart = {
   idCart: 1,
+  table: 6,
   totalPrice: 0,
   tableNumber: 1,
   listItem: [
@@ -124,14 +125,16 @@ export const FoodsCart = {
       id: '1f',
       price: 5,
       title: 'Chocolate',
-      amount: 1
+      amount: 1,
+      size: 'M'
     },
     {
       idCart: '1',
       id: '2f',
       price: 2,
       title: 'Caffè Americano',
-      amount: 1
+      amount: 1,
+      size: 'M'
 
     },
     {
@@ -139,7 +142,8 @@ export const FoodsCart = {
       id: '3f',
       price: 1,
       title: 'Cappuccino',
-      amount: 1
+      amount: 1,
+      size: 'M'
 
     },
     {
@@ -147,7 +151,8 @@ export const FoodsCart = {
       id: '4f',
       price: 7,
       title: 'Caffè Latte',
-      amount: 1
+      amount: 1,
+      size: 'M'
 
     },
     {
@@ -155,7 +160,8 @@ export const FoodsCart = {
       id: '5f',
       price: 4,
       title: 'Berry Trio',
-      amount: 1
+      amount: 1,
+      size: 'M'
     },
   ],
 };
