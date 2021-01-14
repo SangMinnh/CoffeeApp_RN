@@ -88,12 +88,12 @@ export function DrawerContent(props) {
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon
-                                    name="bookmark-outline"
+                                    name="chart-bar"
                                     color={color}
                                     size={30}
                                 />
                             )}
-                            label="Bookmarks"
+                            label="Analysis"
                             labelStyle={{
                                 fontSize: 18
                             }}
@@ -102,16 +102,16 @@ export function DrawerContent(props) {
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon
-                                    name="settings-outline"
+                                    name="history"
                                     color={color}
                                     size={30}
                                 />
                             )}
-                            label="Settings"
+                            label="History"
                             labelStyle={{
                                 fontSize: 18
                             }}
-                            onPress={() => { props.navigation.navigate('SettingScreen') }}
+                            onPress={() => { props.navigation.navigate('HistoryScreen') }}
                         />
                         <DrawerItem
                             icon={({ color, size }) => (
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     userInfoSection: {
-        paddingLeft: 20,
+        paddingHorizontal: 20,
     },
     title: {
         fontSize: 22,
@@ -192,12 +192,12 @@ const styles = StyleSheet.create({
     },
     drawerSection: {
         marginTop: 15,
-        marginLeft: 10
+        marginHorizontal: 10
     },
     bottomDrawerSection: {
         marginBottom: 15,
-        borderTopColor: '#f4f4f4',
-        borderTopWidth: 1,
+        // borderTopColor: '#f4f4f4',
+        // borderTopWidth: 1,
         marginHorizontal: 15
     },
     preference: {

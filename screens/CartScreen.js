@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, Image, StyleSheet, Dimensions, StatusBar, Platform, TouchableOpacity, FlatList, DatePickerAndroid } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { VirtualizedList, View, Text, Image, StyleSheet, Dimensions, StatusBar, Platform, TouchableOpacity, FlatList, DatePickerAndroid } from 'react-native'
 const W = Dimensions.get('window').width;
 import { FoodsCart } from '../model/data';
 
@@ -9,9 +9,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-share';
-
+import { Context as CartContext } from './FoodCartContext';
 import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
+import Animated, { color } from 'react-native-reanimated';
 
 
 
@@ -25,14 +25,15 @@ function FocusAwareStatusBar(props) {
 
 export default function CartScreen() {
 
-
+    const { state, deleteItem } = useContext(CartContext);
 
     const CartItem = ({ item, index }) => {
+        const { colors } = useTheme()
         const [itemState, setItemState] = useState(() => {
             return item;
         })
         function handleAmount(type) {
-            console.log("----FoodCartNow-------", foodCartNow)
+            //console.log("----FoodCartNow-------", foodCartNow)
             if (type === 'remove') {
                 let aamount = itemState.amount - 1;
                 let total = foodCartNow.totalPrice - itemState.price;
@@ -62,19 +63,20 @@ export default function CartScreen() {
         function handleDelete() {
             // console.log("----FoodCartNow-------", foodCartNow)
             let total = foodCartNow.totalPrice - itemState.price * itemState.amount;
-            // const index = cartItemList.findIndex(x => x.id === item.id);
-            //if (index < 0) return;
+
             const newCartItemList = [...cartItemList];
             newCartItemList.splice(index, 1);
             setFoodCartNow({ ...foodCartNow, totalPrice: total, listItem: newCartItemList });
             setCartItemList(newCartItemList);
-            // console.log("------FoodCartNow after delete", foodCartNow)
+
+            deleteItem(itemState.id)
+
         }
 
 
         return (
-            <View style={styles.foodViewBox}>
-                <View style={styles.foodImgDetail}>
+            <View style={[styles.foodViewBox, { backgroundColor: colors.card }]}>
+                <View style={[styles.foodImgDetail, { backgroundColor: colors.card }]}>
                     <View style={styles.foodImageBox} >
                         <Image style={styles.foodImage} source={require('../assets/matcha-latte.jpg')}
                             resizeMode="cover" />
@@ -83,15 +85,15 @@ export default function CartScreen() {
                 <View style={styles.DetailBox}>
                     <View style={styles.foodDetail}>
 
-                        <Text numberOfLines={2} style={styles.nameText}>{itemState.title}</Text>
-                        <Text style={styles.priceText}>Price. ${itemState.price}</Text>
-                        <View style={styles.amountBox}>
+                        <Text numberOfLines={2} style={[styles.nameText, { color: colors.text }]}>{itemState.title}</Text>
+                        <Text style={[styles.priceText, { color: colors.text }]}>Price. ${itemState.price}</Text>
+                        <View style={[styles.amountBox, { backgroundColor: colors.background }]}>
                             <TouchableOpacity onPress={() => handleAmount('remove')}>
                                 <Icon name='ios-remove' color='#838383' size={26}></Icon>
                             </TouchableOpacity>
 
                             <View style={{ alignSelf: 'center', alignContent: 'center', width: 30 }}>
-                                <Text style={{ alignSelf: 'center', alignContent: 'center', fontSize: 16, }}>{itemState.amount}</Text>
+                                <Text style={{ alignSelf: 'center', alignContent: 'center', fontSize: 16, color: colors.text }}>{itemState.amount}</Text>
                             </View>
                             <TouchableOpacity onPress={() => handleAmount('add')}>
                                 <Icon name='ios-add' color='#838383' size={26}></Icon>
@@ -113,22 +115,24 @@ export default function CartScreen() {
             </View >)
     }
 
+    const theme = useTheme();
+    //const { state } = useContext(CartContext);
     const { colors } = useTheme();
     const [foodCartNow, setFoodCartNow] = useState(() => {
         let total = 0;
-        for (item of FoodsCart.listItem) {
+        for (item of state) {
             total += item.price * item.amount;
         }
         return { ...FoodsCart, totalPrice: total }
     });
-    const [cartItemList, setCartItemList] = useState(FoodsCart.listItem);
+    const [cartItemList, setCartItemList] = useState(state);
     const renderCartItem = ({ item, index }) => {
         return (
             <CartItem item={item} index={index}
             />
-
         );
     };
+
 
 
     function handleConfirmOrder() {
@@ -137,25 +141,26 @@ export default function CartScreen() {
     }
     const bs = React.useRef(null);
     const fall = new Animated.Value(1);
-    const renderInner = () => (
-        <View style={styles.Total}>
-            <View style={styles.Total1}>
-                <Text style={styles.TotalText1}>Item Total</Text>
-                <Text style={styles.TotalText1}>${foodCartNow.totalPrice}</Text>
-            </View>
-            <View style={styles.Total1}>
-                <Text style={styles.TotalText1}>Discount</Text>
-                <Text style={styles.TotalText1}>$0</Text>
-            </View>
-            <View style={styles.Total1}>
-                <Text style={styles.TotalText2}>Total</Text>
-                <Text style={styles.TotalText2}>${foodCartNow.totalPrice}</Text>
-            </View>
-            <TouchableOpacity style={styles.confirmBtn}>
-                <Text style={styles.confirmText}>Confirm Order</Text>
-            </TouchableOpacity>
-        </View>
-    );
+    const renderInner = () => {
+        return (
+            <View style={styles.Total}>
+                <View style={styles.Total1}>
+                    <Text style={[styles.TotalText1, { color: colors.text }]}>Item Total</Text>
+                    <Text style={[styles.TotalText1, { color: colors.text }]}>${foodCartNow.totalPrice}</Text>
+                </View>
+                <View style={styles.Total1}>
+                    <Text style={[styles.TotalText1, { color: colors.text }]}>Discount</Text>
+                    <Text style={[styles.TotalText1, { color: colors.text }]}>$0</Text>
+                </View>
+                <View style={styles.Total1}>
+                    <Text style={[styles.TotalText2, { color: colors.text }]}>Total</Text>
+                    <Text style={[styles.TotalText2, { color: colors.text }]}>${foodCartNow.totalPrice}</Text>
+                </View>
+                <TouchableOpacity style={[styles.confirmBtn, { backgroundColor: colors.card }]}>
+                    <Text style={[styles.confirmText, { color: colors.text }]}>Confirm Order</Text>
+                </TouchableOpacity>
+            </View>)
+    };
     const renderHeader = () => (
         <View style={styles.header}>
             <View style={styles.panelHeader}>
@@ -166,7 +171,7 @@ export default function CartScreen() {
 
     return (
         <View style={styles.container}>
-            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#333333' : '#f6f6f6'} />
+            <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
             <BottomSheet
                 ref={bs}
                 snapPoints={[200, 40]}
@@ -178,11 +183,12 @@ export default function CartScreen() {
             />
             <ScrollView >
                 <View>
-                    <Text style={styles.textOderList}>Order List</Text>
+                    <Text style={[styles.textOderList, { color: colors.text }]}>Order List</Text>
                     <FlatList
                         data={cartItemList}
                         renderItem={renderCartItem}
                         keyExtractor={item => item.id}
+                        //getItemCount={getItemCount}
                         vertical
                         showsVerticalScrollIndicator={false}>
                     </FlatList>
@@ -301,7 +307,7 @@ const styles = StyleSheet.create({
     TotalText1: {
         fontSize: 14,
         marginLeft: 5,
-        color: '#373737'
+        //color: '#373737'
     },
     TotalText2: {
         fontSize: 20,
@@ -313,16 +319,16 @@ const styles = StyleSheet.create({
     confirmBtn: {
         borderRadius: 20,
         marginVertical: 20,
-        marginHorizontal: 20,
+        marginHorizontal: 24,
         backgroundColor: '#ffffff',
-        height: 50,
+        height: 52,
         justifyContent: "center"
     },
     confirmText: {
-        fontSize: 16,
+        fontSize: 18,
         color: '#373737',
         alignSelf: 'center',
-        fontWeight: 'bold'
+        //fontWeight: 'bold'
     },
     header: {
         backgroundColor: '#FFa800',

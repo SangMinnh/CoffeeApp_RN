@@ -84,7 +84,7 @@ export const Foods = [
   {
     id: '11f',
     price: 5,
-    title: 'Chocolate Fudge Brownie',
+    title: 'Chocolate Fudge',
     description: 'Dark chocolate flavored ice cream matched with fudge swirls and mixed with fudge brownie pieces.',
     category: 'Ice Cream'
   },
@@ -115,7 +115,7 @@ export const Foods = [
 
 
 export const FoodsCart = {
-  idCart: 1,
+  idCart: '1',
   table: 6,
   totalPrice: 0,
   tableNumber: 1,

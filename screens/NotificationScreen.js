@@ -1,3 +1,4 @@
+//import { useTheme } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   View,
@@ -8,13 +9,21 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-
+import { useIsFocused } from '@react-navigation/native';
+import { TextInput, useTheme } from 'react-native-paper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Notifications from '../model/Notifications';
 
+function FocusAwareStatusBar(props) {
+  const isFocused = useIsFocused();
+
+  return isFocused ? <StatusBar {...props} /> : null;
+}
+
 const NotificationScreen = ({ navigation }) => {
+  const theme = useTheme();
   const [listData, setListData] = useState(
     Notifications.map((NotificationItem, index) => ({
       key: `${index}`,
@@ -202,11 +211,10 @@ const NotificationScreen = ({ navigation }) => {
       />
     );
   };
-
+  const { colors } = useTheme();
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      {/* <StatusBar backgroundColor="#FF6347" barStyle="light-content"/> */}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
       <SwipeListView
         data={listData}
         renderItem={renderItem}
@@ -239,19 +247,20 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   rowFront: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#a8c3ff',
     borderRadius: 20,
     height: 60,
     margin: 5,
     marginBottom: 15,
-    shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+    // shadowColor: '#999',
+    // shadowOffset: { width: 0, height: 1 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
+    // elevation: 5,
   },
   rowFrontVisible: {
-    backgroundColor: '#FFF',
+    //backgroundColor: '#d0deff',
+    backgroundColor: '#46465c',
     borderRadius: 20,
     height: 60,
     padding: 10,
@@ -296,7 +305,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#666',
+    color: '#fff',
   },
   details: {
     fontSize: 12,

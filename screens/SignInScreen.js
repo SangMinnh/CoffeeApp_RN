@@ -114,7 +114,7 @@ const SignInScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor='#FFD200' barStyle="light-content" />
+            <StatusBar backgroundColor='#FFD200' barStyle="dark-content" />
             <View style={styles.header}>
                 <Text style={styles.text_header}>Welcome!</Text>
             </View>
@@ -127,7 +127,7 @@ const SignInScreen = ({ navigation }) => {
                 <Text style={[styles.text_footer, {
                     color: colors.text
                 }]}>Username</Text>
-                <View style={styles.action}>
+                <View style={[styles.action, { backgroundColor: colors.card }]}>
                     <FontAwesome style={styles.actionIcon}
                         name="user-o"
                         color={colors.text}
@@ -166,7 +166,7 @@ const SignInScreen = ({ navigation }) => {
                     color: colors.text,
                     marginTop: 35
                 }]}>Password</Text>
-                <View style={styles.action}>
+                <View style={[styles.action, { backgroundColor: colors.card }]}>
                     <Feather style={styles.actionIcon}
                         name="lock"
                         color={colors.text}
@@ -235,7 +235,7 @@ const SignInScreen = ({ navigation }) => {
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#373737'
+                            color: colors.text
                         }]}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>

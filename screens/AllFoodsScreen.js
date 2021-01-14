@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, } from 'react-native';
 const W = Dimensions.get('window').width;
 import { Foods } from '../model/data';
-
+import { Context as CartContext } from './FoodCartContext';
 import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+//import Icon from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 import { block, color } from 'react-native-reanimated';
@@ -20,62 +22,75 @@ function FocusAwareStatusBar(props) {
     return isFocused ? <StatusBar {...props} /> : null;
 }
 
+
+
 const listCategory = [
     {
         id: 'All',
-        iconName: 'ios-restaurant',
-
+        // iconName: 'ios-restaurant',
+        iconName: 'silverware-variant'
     },
     {
         id: 'Coffee',
-        iconName: 'ios-cafe',
+        //iconName: 'ios-cafe',
+        iconName: 'coffee-outline'
 
     },
     {
         id: 'Ice Cream',
-        iconName: 'ios-ice-cream',
-
+        // iconName: 'ios-ice-cream',
+        iconName: 'ice-cream'
     },
     {
         id: 'Yogurt',
-        iconName: 'ios-beer',
+        // iconName: 'ios-beer',
+        iconName: 'food-variant'
     },
     {
         id: 'Cold Drink',
-        iconName: 'ios-wine',
+        //iconName: 'ios-wine',
+        iconName: 'glass-cocktail'
     },
 ]
 
-const Category = ({ item, onPress, styleBack, styleIcon }) => (<View style={styles.categoryStatusBox}>
-    <TouchableOpacity onPress={onPress} style={[styles.categoryStatus, styleBack]}>
-        <Icon name={item.iconName} color={styleIcon} size={35}></Icon>
-    </TouchableOpacity>
-    <Text style={styles.categoryTextStatus}>{item.id}</Text >
-</View>);
+const Category = ({ item, onPress, styleBack, styleIcon }) => (
+    <View style={styles.categoryStatusBox}>
+        <TouchableOpacity onPress={onPress} style={[styles.categoryStatus, styleBack]}>
+            <Icon name={item.iconName} color={styleIcon} size={35}></Icon>
+        </TouchableOpacity>
+        <Text style={styles.categoryTextStatus}>{item.id}</Text >
+    </View>);
 
-const FoodView = ({ item, index }) => (
-    <View style={styles.foodViewBox}>
-        <View style={styles.foodImgDetail}>
-            <View style={styles.foodImageBox} >
-                <Image style={styles.foodImage} source={require('../assets/matcha-latte.jpg')}
-                    resizeMode="cover" />
-            </View>
-            <View style={styles.foodDetail}>
-                <View style={styles.foodDetailBox}>
-                    <Text numberOfLines={2} style={styles.nameText}>{item.title}</Text>
-                    <Text style={styles.nameCategory}>{item.category}</Text>
-                    <Text style={styles.namePrice}>Price. ${item.price}</Text>
+const FoodView = ({ item, index }) => {
+    const { state, addToCart } = useContext(CartContext);
+    const { colors } = useTheme();
+    return (
+        <TouchableOpacity style={[styles.foodViewBox, { backgroundColor: colors.card }]}>
+            <View style={styles.foodImgDetail}>
+                <View style={styles.foodImageBox} >
+                    <Image style={styles.foodImage} source={require('../assets/matcha-latte.jpg')}
+                        resizeMode="cover" />
+                </View>
+                <View style={styles.foodDetail}>
+                    <View style={styles.foodDetailBox}>
+                        <Text numberOfLines={2} style={[styles.nameText, { color: colors.text }]}>{item.title}</Text>
+                        <Text style={[styles.nameCategory]}>{item.category}</Text>
+                        <Text style={[styles.namePrice, { color: colors.text }]}>Price. ${item.price}</Text>
+                    </View>
                 </View>
             </View>
-        </View>
 
-        <TouchableOpacity style={styles.addToCcart}>
-            <Icon name='ios-add' color='#838383' size={40}></Icon>
-        </TouchableOpacity>
-    </View>
-)
+            <TouchableOpacity style={[styles.addToCcart]} onPress={() => {
+                addToCart(item)
+                console.log(state)
+            }}>
+                <Icon name='plus-circle-outline' color='#0aff0a' size={35}></Icon>
+            </TouchableOpacity>
+        </TouchableOpacity>)
+}
 
 const AllFoodsScreen = () => {
+
     const { colors } = useTheme();
     const [selectedCategoryId, setSelectedCategoryId] = useState('All');
     const [foodList, setFoodsList] = useState(Foods);
@@ -88,7 +103,7 @@ const AllFoodsScreen = () => {
     }
 
     const renderItem = ({ item }) => {
-        const backgroundColor = item.id === selectedCategoryId ? "#ff8500" : "#ffffff";
+        const backgroundColor = item.id === selectedCategoryId ? "#ff8500" : colors.card;
         const color = item.id === selectedCategoryId ? "#ffffff" : "#838383";
         return (
             <Category
@@ -111,16 +126,15 @@ const AllFoodsScreen = () => {
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#ffa800' : '#ffa800'} />
             <ScrollView style={styles.sliderContainer}>
-
                 <View style={styles.view1}>
-                    <View style={styles.textInputView}>
+                    <View style={[styles.textInputView, { backgroundColor: colors.card }]}>
                         <Icon style={styles.textInputViewIcon}
-                            name="ios-search"
+                            name="magnify"
                             color={colors.text}
                             size={28}
                         />
                         <TextInput placeholder="Search here..."
-                            placeholderTextColor="#666666"
+                            placeholderTextColor={colors.text}
                             style={[styles.textInput, {
                                 color: colors.text
                             }]}
@@ -131,15 +145,15 @@ const AllFoodsScreen = () => {
                 </View>
 
                 <View style={styles.view2}>
-                    <View style={styles.view3}>
+                    <View style={[styles.view3, { backgroundColor: colors.background }]}>
                         <View style={styles.locationBox}>
                             <View style={{ marginTop: 5 }}>
-                                <Fontisto name='map-marker-alt' color='#373737' size={35} ></Fontisto>
+                                <Feather name='map-pin' color={colors.text} size={35} ></Feather>
                             </View>
 
                             <View style={{ marginLeft: 11 }}>
-                                <Text style={styles.locationText1}>Trinh's House Coffee</Text>
-                                <Text style={styles.locationText2}>Binh Tho, Thu Duc, HCM City</Text>
+                                <Text style={[styles.locationText1, { color: colors.text }]}>Trinh's House Coffee</Text>
+                                <Text style={[styles.locationText2, , { color: colors.text }]}>Binh Tho, Thu Duc, HCM City</Text>
                             </View>
                         </View>
                     </View>
@@ -158,7 +172,7 @@ const AllFoodsScreen = () => {
 
                 <View style={styles.filterResultBox}>
                     <View style={styles.resFilterTextBox}>
-                        <Text style={styles.resFilterText}>{selectedCategoryId}</Text>
+                        <Text style={[styles.resFilterText, { color: colors.text }]}>{selectedCategoryId}</Text>
                     </View>
                     <FlatList
                         data={foodList}
@@ -171,7 +185,7 @@ const AllFoodsScreen = () => {
                 </View>
 
             </ScrollView>
-        </View>
+        </View >
     );
 };
 
@@ -198,7 +212,7 @@ const styles = StyleSheet.create({
         width: W
     },
     view3: {
-        backgroundColor: '#f6f6f6',
+        //backgroundColor: '#f6f6f6',
         borderTopLeftRadius: 50,
         height: 110,
         width: W,
@@ -271,7 +285,7 @@ const styles = StyleSheet.create({
 
     },
     resFilterTextBox: {
-        marginHorizontal: 30,
+        marginHorizontal: 45,
         marginVertical: 15
     },
     resFilterText: {
@@ -280,7 +294,7 @@ const styles = StyleSheet.create({
     },
     foodViewBox: {
         flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#ffffff',
         borderRadius: 15,
         marginHorizontal: 25,
         marginBottom: 25,
@@ -289,14 +303,15 @@ const styles = StyleSheet.create({
     },
     foodImgDetail: {
         flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
+        //backgroundColor: '#46465c',
         borderRadius: 15,
     },
 
     foodImageBox: {
-        width: 105,
-        height: 105,
-        borderRadius: 15
+        width: 115,
+        height: 115,
+        borderRadius: 15,
+        padding: 10
     },
     foodDetail: {
         justifyContent: 'center',
@@ -326,7 +341,7 @@ const styles = StyleSheet.create({
     },
     addToCcart: {
         justifyContent: 'center',
-        paddingRight: 15,
+        paddingHorizontal: 15,
         borderRadius: 15,
     }
 

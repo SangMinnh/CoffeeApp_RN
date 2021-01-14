@@ -5,7 +5,7 @@
  * @format
  * @flow
  */
-
+import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import {
@@ -25,14 +25,14 @@ import { DrawerContent } from './screens/DrawerContent';
 
 import MainTabScreen from './screens/MainTabScreen';
 import SupportScreen from './screens/SupportScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import HistoryScreen from './screens/HistoryScreen';
 import BookmarkScreen from './screens/BookmarkScreen';
 
 import { AuthContext } from './components/context';
 
 import RootStackScreen from './screens/RootStackScreen';
 
-import AsyncStorage from '@react-native-community/async-storage';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -58,6 +58,7 @@ const App = () => {
       backgroundWhite: '#ffffff',
       text: '#333333',
       iconbar: 'ffa800',
+      card: '#ffffff',
       tabBarBackground: '#d0d0d0'
     }
   }
@@ -69,7 +70,9 @@ const App = () => {
       ...NavigationDarkTheme.colors,
       ...PaperDarkTheme.colors,
       background: '#333333',
+      backgroundWhite: '#ffffff',
       text: '#ffffff',
+      card: '#46465c',
       iconbar: 'ffd200',
       tabBarBackground: '#1a1a1a'
     }
@@ -175,7 +178,7 @@ const App = () => {
             <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
               <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
               <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-              <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
+              <Drawer.Screen name="HistoryScreen" component={HistoryScreen} />
               <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
             </Drawer.Navigator>
           )

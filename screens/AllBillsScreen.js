@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, } from 'react-native';
 const W = Dimensions.get('window').width;
-
 import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -35,11 +34,12 @@ const BillView = ({ item, index }) => {
 
 const AllBillsScreen = () => {
 
-    const { colors } = useTheme();
+    const theme = useTheme();
+
 
     return (
         <View style={styles.container}>
-            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#333333' : '#f6f6f6'} />
+            <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
             <ScrollView>
                 <BillView></BillView>
                 <BillView></BillView>
