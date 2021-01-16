@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { TextInput, useTheme } from 'react-native-paper';
@@ -86,6 +87,7 @@ const NotificationScreen = ({ navigation }) => {
     }
 
     return (
+      <SafeAreaView>
       <Animated.View
         style={[styles.rowFront, { height: rowHeightAnimatedValue }]}>
         <TouchableHighlight
@@ -102,6 +104,7 @@ const NotificationScreen = ({ navigation }) => {
           </View>
         </TouchableHighlight>
       </Animated.View>
+      </SafeAreaView>
     );
   };
 

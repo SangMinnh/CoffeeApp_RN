@@ -26,6 +26,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CardListScreen from './CardListScreen';
 import CardItemDetails from './CardItemDetails';
 import CartScreen from './CartScreen';
+import { SafeAreaView } from 'react-native';
 
 
 const HomeStack = createStackNavigator();
@@ -63,6 +64,7 @@ const MainTabScreen = () => {
 
       // }}
       >
+        
         <Tab.Screen
           name="Home"
           component={HomeStackScreen}

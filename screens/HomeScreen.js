@@ -7,6 +7,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
@@ -25,8 +26,10 @@ const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
 
   return (
+    
     <ScrollView style={styles.container}>
       <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
+      <SafeAreaView>
       <View style={styles.sliderContainer}>
         <Swiper
           autoplay
@@ -56,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </Swiper>
       </View>
-
+      </SafeAreaView>
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.categoryBtn}

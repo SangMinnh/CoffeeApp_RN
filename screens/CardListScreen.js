@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import {data} from '../model/data';
 import Card from '../components/Card';
 
@@ -16,11 +16,13 @@ const CardListScreen = ({navigation}) => {
 
     return (
       <View style={styles.container}>
+        <SafeAreaView>
         <FlatList 
             data={data}
             renderItem={renderItem}
             keyExtractor={item => item.id}
         />
+        </SafeAreaView>
       </View>
     );
 };

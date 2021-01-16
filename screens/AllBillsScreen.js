@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, } from 'react-native';
+import { View, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, SafeAreaView, } from 'react-native';
 const W = Dimensions.get('window').width;
 import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
@@ -39,6 +39,7 @@ const AllBillsScreen = () => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView>
             <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
             <ScrollView>
                 <BillView></BillView>
@@ -51,7 +52,7 @@ const AllBillsScreen = () => {
                 <BillView></BillView>
                 <BillView></BillView>
             </ScrollView>
-
+            </SafeAreaView>
         </View>
     );
 }
