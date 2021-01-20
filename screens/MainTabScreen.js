@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 //import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,7 +18,9 @@ import ExploreScreen from './ExploreScreen';
 import ProfileScreen from './ProfileScreen';
 import MapTestScreen from './MapTestScreen';
 import EditProfileScreen from './EditProfileScreen';
-import { Provider } from './FoodCartContext';
+import { Provider as CartProvider } from './FoodCartContext';
+import { Provider as BillsProvider } from './AllBillsContext';
+import BillDetailScreen from './BillDetailScreen';
 import { Context as CartContext } from './FoodCartContext';
 import { useTheme, Avatar, Badge } from 'react-native-paper';
 import { View } from 'react-native-animatable';
@@ -27,6 +29,7 @@ import CardListScreen from './CardListScreen';
 import CardItemDetails from './CardItemDetails';
 import CartScreen from './CartScreen';
 
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const HomeStack = createStackNavigator();
 const NotificationStack = createStackNavigator();
@@ -38,109 +41,111 @@ const Tab = createMaterialBottomTabNavigator();
 const MainTabScreen = () => {
   const { colors } = useTheme();
   return (
-    <Provider>
-      <Tab.Navigator initialRouteName="Home"
-        //labeled={false}
-        activeTintColor='#27dd06'
-        inactiveTintColor='#FFD200'
-      // tabBarOptions={{
+    <BillsProvider>
+      <CartProvider>
+        <Tab.Navigator initialRouteName="Home"
+          //labeled={false}
+          activeTintColor='#27dd06'
+          inactiveTintColor='#FFD200'
+        // tabBarOptions={{
 
 
-      //   // activeBackgroundColor: 'tomato',
-      //   // inactiveBackgroundColor: 'white',
-      //   showLabel: false,
-      //   labelStyle:
-      //   {
-      //     fontSize: 10
-      //   },
-      //   safeAreaInsets:
-      //   {
-      //     bottom: 10,
+        //   // activeBackgroundColor: 'tomato',
+        //   // inactiveBackgroundColor: 'white',
+        //   showLabel: false,
+        //   labelStyle:
+        //   {
+        //     fontSize: 10
+        //   },
+        //   safeAreaInsets:
+        //   {
+        //     bottom: 10,
 
-      //   },
-      //   paddingBottom: 50
+        //   },
+        //   paddingBottom: 50
 
 
-      // }}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeStackScreen}
-          options={{
-            tabBarLabel: 'Home',
-            showLabel: false,
-            tabBarColor: '#FF6347',
-            //tabBarColor: '#fff',
-            tabBarIcon: ({ color }) => (
-              <Icon name='ios-home' color={color} size={28} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Notifications"
-          component={NotificationStackScreen}
-          options={{
-            tabBarBadge: 16,
-            tabBarLabel: 'Updates',
-            tabBarColor: '#1f65ff',
-            //tabBarColor: '#fff',
-            tabBarIcon: ({ color }) => (
-              <Icon name='ios-notifications' color={color} size={28} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="All Foods"
-          component={AllFoodsStackScreen}
-          showLabel={false}
-          options={{
-            tabBarLabel: 'New',
-            tabBarColor: '#FFA800',
-            //tabBarColor: '#fff',
+        // }}
+        >
+          <Tab.Screen
+            name="Home"
+            component={HomeStackScreen}
+            options={{
+              tabBarLabel: 'Home',
+              showLabel: false,
+              tabBarColor: '#FF6347',
+              //tabBarColor: '#fff',
+              tabBarIcon: ({ color }) => (
+                <Icon name='ios-home' color={color} size={28} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Notifications"
+            component={NotificationStackScreen}
+            options={{
+              tabBarBadge: 16,
+              tabBarLabel: 'Updates',
+              tabBarColor: '#1f65ff',
+              //tabBarColor: '#fff',
+              tabBarIcon: ({ color }) => (
+                <Icon name='ios-notifications' color={color} size={28} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="All Foods"
+            component={AllFoodsStackScreen}
+            showLabel={false}
+            options={{
+              tabBarLabel: 'New',
+              tabBarColor: '#FFA800',
+              //tabBarColor: '#fff',
 
-            tabBarIcon: ({ color }) => (
-              // <View style={{
-              //   borderRadius: 50,
-              //   width: 42,
-              //   height: 42,
-              //   marginTop: -10,
-              //   backgroundColor: '#27dd06',
-              //   justifyContent: 'center'
-              // }}>
+              tabBarIcon: ({ color }) => (
+                // <View style={{
+                //   borderRadius: 50,
+                //   width: 42,
+                //   height: 42,
+                //   marginTop: -10,
+                //   backgroundColor: '#27dd06',
+                //   justifyContent: 'center'
+                // }}>
 
-              // </View>
-              <Icon style={{ alignSelf: 'center' }} name='ios-add-circle-outline' color={color} size={28} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Bills"
-          component={BillsStackScreen}
-          options={{
-            tabBarLabel: 'Bills',
-            tabBarColor: '#d02860',
-            //tabBarColor: '#fff',
-            tabBarIcon: ({ color }) => (
-              <Icon name='ios-document' color={color} size={28} />
-              //tabBarColor: '#d02860',
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileStackScreen}
-          options={{
-            tabBarLabel: 'Profile',
-            tabBarColor: '#694fad',
-            // tabBarColor: '#fff',
-            tabBarIcon: ({ color }) => (
-              <Icon name='ios-person' color={color} size={28} />
-            ),
-          }}
-        />
+                // </View>
+                <Icon style={{ alignSelf: 'center' }} name='ios-add-circle-outline' color={color} size={28} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Bills"
+            component={BillsStackScreen}
+            options={{
+              tabBarLabel: 'Bills',
+              tabBarColor: '#d02860',
+              //tabBarColor: '#fff',
+              tabBarIcon: ({ color }) => (
+                <Icon name='ios-document' color={color} size={28} />
+                //tabBarColor: '#d02860',
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileStackScreen}
+            options={{
+              tabBarLabel: 'Profile',
+              tabBarColor: '#694fad',
+              // tabBarColor: '#fff',
+              tabBarIcon: ({ color }) => (
+                <Icon name='ios-person' color={color} size={28} />
+              ),
+            }}
+          />
 
-      </Tab.Navigator >
-    </Provider>)
+        </Tab.Navigator >
+      </CartProvider>
+    </BillsProvider>)
 };
 
 export default MainTabScreen;
@@ -287,6 +292,7 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { state } = useContext(CartContext);
   return (
+
     <AllFoodsStack.Navigator
       screenOptions={(route) => ({
         headerStyle: {
@@ -299,6 +305,7 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
           fontWeight: 'bold',
         },
       })}>
+
       <AllFoodsStack.Screen
         name="AllFoods"
         component={AllFoodsScreen}
@@ -332,11 +339,21 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
 
           ),
           headerRight: () => (
-            <TouchableOpacity Badge={5} onPress={() => navigation.navigate('CartScreen')} style={{
-              paddingRight: 25,
-              flexDirection: 'row',
+            <TouchableOpacity Badge={5} onPress={() => {
+              if (state.length)
+                navigation.navigate('CartScreen')
+              else showMessage({
+                message: "Oops, Your Food Cart is Empty.",
+                type: "info",
+                icon: 'warning',
 
-            }}>
+              });
+            }}
+              style={{
+                paddingRight: 25,
+                flexDirection: 'row',
+
+              }}>
 
 
               <Fontisto
@@ -377,8 +394,8 @@ const AllFoodsStackScreen = ({ navigation, route }) => {
               padding: 10,
               justifyContent: 'center'
             }}>
-              <Icon
-                name="ios-arrow-back"
+              <Feather
+                name="arrow-left"
                 size={40}
                 color={colors.text}
 
@@ -433,7 +450,7 @@ const BillsStackScreen = ({ navigation }) => {
       <BillsStack.Screen
         name="All Bills"
         component={AllBillsScreen}
-        options={{
+        options={({ route }) => ({
           headerStyle: {
             backgroundColor: colors.background,
             shadowColor: colors.background, // iOS
@@ -462,7 +479,41 @@ const BillsStackScreen = ({ navigation }) => {
             </TouchableOpacity>
 
           ),
-        }} />
+        })} />
+      <BillsStack.Screen
+        name="BillDetailScreen"
+        options={{
+          headerStyle: {
+            backgroundColor: colors.background,
+            shadowColor: colors.background, // iOS
+            elevation: 0, // Android
+
+          },
+          title: 'Bill Detail',
+          headerTitleStyle: {
+            fontSize: 20,
+            color: colors.text
+          },
+          headerLeft: () => (
+            <TouchableOpacity style={{
+              marginLeft: 25,
+              justifyContent: 'center'
+            }}>
+              <Feather
+                name="arrow-left"
+                size={40}
+                color={colors.text}
+
+                onPress={() => navigation.navigate('All Bills')}
+              />
+            </TouchableOpacity>
+
+          ),
+          headerTitleAlign: 'center',
+
+          activeTintColor: '#ffffff',
+        }}
+        component={BillDetailScreen} />
 
 
     </BillsStack.Navigator>

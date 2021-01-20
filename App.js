@@ -20,7 +20,7 @@ import {
   DefaultTheme as PaperDefaultTheme,
   DarkTheme as PaperDarkTheme
 } from 'react-native-paper';
-
+import FlashMessage from "react-native-flash-message";
 import { DrawerContent } from './screens/DrawerContent';
 
 import MainTabScreen from './screens/MainTabScreen';
@@ -40,7 +40,7 @@ const App = () => {
   // const [isLoading, setIsLoading] = React.useState(true);
   // const [userToken, setUserToken] = React.useState(null); 
 
-  const [isDarkTheme, setIsDarkTheme] = React.useState(false);
+  const [isDarkTheme, setIsDarkTheme] = React.useState(true);
 
   const initialLoginState = {
     isLoading: true,
@@ -69,10 +69,10 @@ const App = () => {
     colors: {
       ...NavigationDarkTheme.colors,
       ...PaperDarkTheme.colors,
-      background: '#333333',
+      background: '#161622',
       backgroundWhite: '#ffffff',
       text: '#ffffff',
-      card: '#46465c',
+      card: '#2d2d37',
       iconbar: 'ffd200',
       tabBarBackground: '#1a1a1a'
     }
@@ -187,6 +187,7 @@ const App = () => {
           }
         </NavigationContainer>
       </AuthContext.Provider>
+      <FlashMessage position="bottom" />
     </PaperProvider>
   );
 }

@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
+      <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
       <View style={styles.sliderContainer}>
         <Swiper
           autoplay
@@ -110,7 +110,7 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cardsWrapper}>
+      {/* <View style={styles.cardsWrapper}>
         <Text
           style={{
             alignSelf: 'center',
@@ -167,8 +167,8 @@ const HomeScreen = ({ navigation }) => {
               Amazing description for this amazing place
             </Text>
           </View>
-        </View>
-      </View>
+        </View> 
+      </View>*/}
     </ScrollView>
   );
 };

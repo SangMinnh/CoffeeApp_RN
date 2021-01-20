@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   Text,
@@ -13,19 +13,20 @@ import HeaderImageScrollView, {
 } from 'react-native-image-header-scroll-view';
 
 import * as Animatable from 'react-native-animatable';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { TabRouter } from '@react-navigation/native';
 
 const MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 55;
 const MAX_HEIGHT = 350;
 
-const CardItemDetails = ({route}) => {
+const CardItemDetails = ({ route }) => {
   const itemData = route.params.itemData;
   const navTitleView = useRef(null);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" translucent={true} />
       <HeaderImageScrollView
         maxHeight={MAX_HEIGHT}
         minHeight={MIN_HEIGHT}
@@ -48,11 +49,11 @@ const CardItemDetails = ({route}) => {
           style={styles.section}
           onHide={() => navTitleView.current.fadeInUp(200)}
           onDisplay={() => navTitleView.current.fadeOut(100)}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.title}>Overview</Text>
-            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
               <FontAwesome name="star" size={16} color="#FF6347" />
-              <Text style={{marginHorizontal: 2}}>{itemData.rating}</Text>
+              <Text style={{ marginHorizontal: 2 }}>{itemData.rating}</Text>
               <Text>({itemData.reviews})</Text>
             </View>
           </View>
@@ -72,10 +73,10 @@ const CardItemDetails = ({route}) => {
           </View>
         </View>
 
-        <View style={[styles.section, {height: 250}]}>
-          <MapView
+        <View style={[styles.section, { height: 250 }]}>
+          {/* <MapView
             provider={PROVIDER_GOOGLE}
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             region={{
               latitude: itemData.coordinate.latitude,
               longitude: itemData.coordinate.longitude,
@@ -86,7 +87,7 @@ const CardItemDetails = ({route}) => {
               coordinate={itemData.coordinate}
               image={require('../assets/map_marker.png')}
             />
-          </MapView>
+          </MapView> */}
         </View>
       </HeaderImageScrollView>
     </View>

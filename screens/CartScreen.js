@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
-import { VirtualizedList, View, Text, Image, StyleSheet, Dimensions, StatusBar, Platform, TouchableOpacity, FlatList, DatePickerAndroid } from 'react-native'
+import { VirtualizedList, View, Text, Image, StyleSheet, Dimensions, StatusBar, Platform, TouchableOpacity, FlatList, DatePickerAndroid, SafeAreaView } from 'react-native'
 const W = Dimensions.get('window').width;
 import { FoodsCart } from '../model/data';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { TextInput, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,8 +10,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-share';
 import { Context as CartContext } from './FoodCartContext';
+import { Context as BillsContext } from './FoodCartContext';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated, { color } from 'react-native-reanimated';
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 
 
@@ -25,14 +28,16 @@ function FocusAwareStatusBar(props) {
 
 export default function CartScreen() {
 
-    const { state, deleteItem } = useContext(CartContext);
+    const { state, deleteItem, handleItemAmount } = useContext(CartContext);
+    const { addNewBill } = useContext(BillsContext);
 
     const CartItem = ({ item, index }) => {
         const { colors } = useTheme()
         const [itemState, setItemState] = useState(() => {
             return item;
         })
-        function handleAmount(type) {
+
+        function handleNowAmount(type) {
             //console.log("----FoodCartNow-------", foodCartNow)
             if (type === 'remove') {
                 let aamount = itemState.amount - 1;
@@ -40,9 +45,11 @@ export default function CartScreen() {
                 if (aamount != 0) {
                     const newCartItemList = [...cartItemList];
                     newCartItemList.splice(index, 1, { ...itemState, amount: aamount });
-                    setFoodCartNow({ ...foodCartNow, totalPrice: total, listItem: newCartItemList });
+                    setFoodCartNow({ ...foodCartNow, totalPrice: total });
                     setCartItemList(newCartItemList);
+                    handleItemAmount(newCartItemList);
                     console.log("----NewCartItemList: ", newCartItemList)
+
                 }
                 else handleDelete();
 
@@ -52,25 +59,31 @@ export default function CartScreen() {
                 let total = foodCartNow.totalPrice + itemState.price;
                 const newCartItemList = [...cartItemList];
                 newCartItemList.splice(index, 1, { ...itemState, amount: aamount });
-                setFoodCartNow({ ...foodCartNow, totalPrice: total, listItem: newCartItemList });
+                setFoodCartNow({ ...foodCartNow, totalPrice: total });
                 setCartItemList(newCartItemList);
+                handleItemAmount(newCartItemList);
                 console.log("----NewCartItemList: ", newCartItemList)
 
             }
             //console.log("------FoodCartNow after add or remove-------", foodCartNow)
+
         }
-
         function handleDelete() {
-            // console.log("----FoodCartNow-------", foodCartNow)
-            let total = foodCartNow.totalPrice - itemState.price * itemState.amount;
 
-            const newCartItemList = [...cartItemList];
+            deleteItem(item.id, () => {
+                showMessage({
+                    message: `${item.title} has been removed from your cart.`,
+                    type: "danger",
+                    icon: 'danger'
+                });
+            })
+            let total = foodCartNow.totalPrice - itemState.price * itemState.amount;
+            const newCartItemList = [...state];
             newCartItemList.splice(index, 1);
-            setFoodCartNow({ ...foodCartNow, totalPrice: total, listItem: newCartItemList });
+            setFoodCartNow({ ...foodCartNow, totalPrice: total });
             setCartItemList(newCartItemList);
 
-            deleteItem(itemState.id)
-
+            console.log("----FoodCartNow-------", foodCartNow)
         }
 
 
@@ -88,14 +101,14 @@ export default function CartScreen() {
                         <Text numberOfLines={2} style={[styles.nameText, { color: colors.text }]}>{itemState.title}</Text>
                         <Text style={[styles.priceText, { color: colors.text }]}>Price. ${itemState.price}</Text>
                         <View style={[styles.amountBox, { backgroundColor: colors.background }]}>
-                            <TouchableOpacity onPress={() => handleAmount('remove')}>
+                            <TouchableOpacity onPress={() => handleNowAmount('remove')}>
                                 <Icon name='ios-remove' color='#838383' size={26}></Icon>
                             </TouchableOpacity>
 
                             <View style={{ alignSelf: 'center', alignContent: 'center', width: 30 }}>
                                 <Text style={{ alignSelf: 'center', alignContent: 'center', fontSize: 16, color: colors.text }}>{itemState.amount}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => handleAmount('add')}>
+                            <TouchableOpacity onPress={() => handleNowAmount('add')}>
                                 <Icon name='ios-add' color='#838383' size={26}></Icon>
                             </TouchableOpacity>
 
@@ -105,7 +118,9 @@ export default function CartScreen() {
 
                 </View>
                 <View style={styles.edit}>
-                    <TouchableOpacity onPress={() => handleDelete()}>
+                    <TouchableOpacity onPress={() => {
+                        handleDelete()
+                    }}>
                         <Icon name='ios-close' color='#FF6347' size={30} ></Icon>
                     </TouchableOpacity>
 
@@ -123,7 +138,7 @@ export default function CartScreen() {
         for (item of state) {
             total += item.price * item.amount;
         }
-        return { ...FoodsCart, totalPrice: total }
+        return { totalPrice: total, idCart: 'as5acawsdas', table: 1, }
     });
     const [cartItemList, setCartItemList] = useState(state);
     const renderCartItem = ({ item, index }) => {
@@ -137,7 +152,26 @@ export default function CartScreen() {
 
     function handleConfirmOrder() {
         // FoodsCart = { ...foodCartNow };
-        console.log(foodCartNow);
+        //console.log('cartnow', foodCartNow);
+        console.log('state', state);
+        console.log('Bill Detail', foodCartNow);
+        // const asyncFetch = async () => {
+        //     try {
+        //         const cart = await AsyncStorage.getItem("cartNow");
+        //         console.log("caxlozzzzz", JSON.parse(cart));
+        //     }
+        //     catch (err) {
+
+        //     }
+
+
+
+
+        // };
+
+        // asyncFetch();
+
+
     }
     const bs = React.useRef(null);
     const fall = new Animated.Value(1);
@@ -156,7 +190,11 @@ export default function CartScreen() {
                     <Text style={[styles.TotalText2, { color: colors.text }]}>Total</Text>
                     <Text style={[styles.TotalText2, { color: colors.text }]}>${foodCartNow.totalPrice}</Text>
                 </View>
-                <TouchableOpacity style={[styles.confirmBtn, { backgroundColor: colors.card }]}>
+                <TouchableOpacity style={[styles.confirmBtn, { backgroundColor: colors.card }]}
+                    onPress={() => {
+                        handleConfirmOrder()
+
+                    }}>
                     <Text style={[styles.confirmText, { color: colors.text }]}>Confirm Order</Text>
                 </TouchableOpacity>
             </View>)
@@ -170,8 +208,9 @@ export default function CartScreen() {
     );
 
     return (
-        <View style={styles.container}>
-            <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#333333' : '#f6f6f6'} />
+        <SafeAreaView style={styles.container}>
+
+            <FocusAwareStatusBar translucent={true} barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
             <BottomSheet
                 ref={bs}
                 snapPoints={[200, 40]}
@@ -181,26 +220,19 @@ export default function CartScreen() {
                 callbackNode={fall}
                 enabledGestureInteraction={true}
             />
-            <ScrollView >
-                <View>
-                    <Text style={[styles.textOderList, { color: colors.text }]}>Order List</Text>
-                    <FlatList
-                        data={cartItemList}
-                        renderItem={renderCartItem}
-                        keyExtractor={item => item.id}
-                        //getItemCount={getItemCount}
-                        vertical
-                        showsVerticalScrollIndicator={false}>
-                    </FlatList>
-                </View>
+            <View>
+                <Text style={[styles.textOderList, { color: colors.text }]}>Order List</Text>
 
-
-            </ScrollView>
-            <View style={{ width: W, height: 40 }} />
-
-
-
-        </View>
+                <FlatList style={{ marginBottom: 80 }}
+                    data={cartItemList}
+                    renderItem={renderCartItem}
+                    keyExtractor={item => item.id}
+                    //getItemCount={getItemCount}
+                    vertical
+                    showsVerticalScrollIndicator={false}>
+                </FlatList>
+            </View>
+        </SafeAreaView>
     )
 }
 

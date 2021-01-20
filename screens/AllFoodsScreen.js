@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, } from 'react-native';
+import { View, SafeAreaView, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, } from 'react-native';
 const W = Dimensions.get('window').width;
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import { Foods } from '../model/data';
 import { Context as CartContext } from './FoodCartContext';
 import { useIsFocused } from '@react-navigation/native';
@@ -62,7 +64,7 @@ const Category = ({ item, onPress, styleBack, styleIcon }) => (
     </View>);
 
 const FoodView = ({ item, index }) => {
-    const { state, addToCart } = useContext(CartContext);
+    const { addToCart } = useContext(CartContext);
     const { colors } = useTheme();
     return (
         <TouchableOpacity style={[styles.foodViewBox, { backgroundColor: colors.card }]}>
@@ -81,8 +83,13 @@ const FoodView = ({ item, index }) => {
             </View>
 
             <TouchableOpacity style={[styles.addToCcart]} onPress={() => {
-                addToCart(item)
-                console.log(state)
+                addToCart(item.id, item.price, item.title)
+                showMessage({
+                    message: `${item.title} has been added to your cart.`,
+                    type: "success",
+                    icon: 'success',
+
+                });
             }}>
                 <Icon name='plus-circle-outline' color='#0aff0a' size={35}></Icon>
             </TouchableOpacity>
@@ -123,9 +130,10 @@ const AllFoodsScreen = () => {
         );
     };
     return (
-        <View style={styles.container}>
-            <FocusAwareStatusBar barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#ffa800' : '#ffa800'} />
-            <ScrollView style={styles.sliderContainer}>
+        <SafeAreaView style={styles.container}>
+            <FlashMessage style={{ paddingTop: StatusBar.currentHeight }} position="bottom" />
+            <FocusAwareStatusBar translucent={true} barStyle={colors.dark ? 'light-content' : 'dark-content'} backgroundColor={colors.dark ? '#ffa800' : '#ffa800'} />
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.sliderContainer}>
                 <View style={styles.view1}>
                     <View style={[styles.textInputView, { backgroundColor: colors.card }]}>
                         <Icon style={styles.textInputViewIcon}
@@ -185,7 +193,8 @@ const AllFoodsScreen = () => {
                 </View>
 
             </ScrollView>
-        </View >
+
+        </SafeAreaView >
     );
 };
 
@@ -333,7 +342,7 @@ const styles = StyleSheet.create({
     nameCategory: {
         fontSize: 14,
         paddingVertical: 3,
-        color: '#838383'
+        color: '#979797'
     },
     namePrice: {
         fontSize: 16,

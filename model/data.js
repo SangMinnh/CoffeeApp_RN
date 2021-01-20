@@ -114,57 +114,282 @@ export const Foods = [
 ]
 
 
-export const FoodsCart = {
-  idCart: '1',
-  table: 6,
-  totalPrice: 0,
-  tableNumber: 1,
-  listItem: [
-    {
-      idCart: '1',
-      id: '1f',
-      price: 5,
-      title: 'Chocolate',
-      amount: 1,
-      size: 'M'
-    },
-    {
-      idCart: '1',
-      id: '2f',
-      price: 2,
-      title: 'Caffè Americano',
-      amount: 1,
-      size: 'M'
+export const AllBills = [
+  {
+    idCart: '1jsooaoD8Os',
+    table: 6,
+    totalPrice: 60,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
 
-    },
-    {
-      idCart: '1',
-      id: '3f',
-      price: 1,
-      title: 'Cappuccino',
-      amount: 1,
-      size: 'M'
+      },
+      {
+        id: '3f',
+        price: 1,
+        title: 'Cappuccino',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '5f',
+        price: 4,
+        title: 'Berry Trio',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+  {
+    idCart: 'dasfpppasdasdasdasda',
+    table: 2,
+    totalPrice: 50,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '1f',
+        price: 5,
+        title: 'Chocolate',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
 
-    },
-    {
-      idCart: '1',
-      id: '4f',
-      price: 7,
-      title: 'Caffè Latte',
-      amount: 1,
-      size: 'M'
+      },
+      {
+        id: '3f',
+        price: 1,
+        title: 'Cappuccino',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '5f',
+        price: 4,
+        title: 'Berry Trio',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+  {
+    idCart: '1jsooa5d6w555d5d55d8Os',
+    table: 15,
+    totalPrice: 5,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '1f',
+        price: 5,
+        title: 'Chocolate',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
+      },
 
-    },
-    {
-      idCart: '1',
-      id: '5f',
-      price: 4,
-      title: 'Berry Trio',
-      amount: 1,
-      size: 'M'
-    },
-  ],
-};
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '5f',
+        price: 4,
+        title: 'Berry Trio',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+  {
+    idCart: '1jzxcdffbdfbdfvOs',
+    table: 4,
+    totalPrice: 88,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '1f',
+        price: 5,
+        title: 'Chocolate',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
+
+      },
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '5f',
+        price: 4,
+        title: 'Berry Trio',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+  {
+    idCart: '131435jassf8Os',
+    table: 6,
+    totalPrice: 10,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '1f',
+        price: 5,
+        title: 'Chocolate',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
+
+      },
+      {
+        id: '3f',
+        price: 1,
+        title: 'Cappuccino',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+  {
+    idCart: '11435jasdsfdoD8Os',
+    table: 7,
+    totalPrice: 20,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '1f',
+        price: 5,
+        title: 'Chocolate',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
+
+      },
+      {
+        id: '3f',
+        price: 1,
+        title: 'Cappuccino',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+  {
+    idCart: '131435sd6shnnsfdoD8s',
+    table: 2,
+    totalPrice: 17,
+    tableNumber: 1,
+    status: 'Processing',
+    listItem: [
+      {
+        id: '1f',
+        price: 5,
+        title: 'Chocolate',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '2f',
+        price: 2,
+        title: 'Caffè Americano',
+        amount: 1,
+        size: 'M'
+
+      },
+      {
+        id: '3f',
+        price: 1,
+        title: 'Cappuccino',
+        amount: 1,
+        size: 'M'
+      },
+      {
+        id: '4f',
+        price: 7,
+        title: 'Caffè Latte',
+        amount: 1,
+        size: 'M'
+      },
+    ],
+  },
+
+]
 
 export const CartDetail = [
   {
