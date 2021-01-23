@@ -4,42 +4,7 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<array>
-			<string>fonts/FontAwesome.ttf</string>
-			<string>fonts/Ionicons.ttf</string>
-			<string>fonts/Foundation.ttf</string>
-			<string>fonts/MaterialCommunityIcons.ttf</string>
-			<string>fonts/MaterialIcons.ttf</string>
-			<string>fonts/AntDesign.ttf</string>
-			<string>fonts/Entypo.ttf</string>
-			<string>fonts/EvilIcons.ttf</string>
-			<string>fonts/Feather.ttf</string>
-			<string>fonts/FontAwesome5_Brands.ttf</string>
-			<string>fonts/FontAwesome5_Regular.ttf</string>
-			<string>fonts/FontAwesome5_Solid.ttf</string>
-			<string>fonts/Fontisto.ttf</string>
-			<string>fonts/Octicons.ttf</string>
-			<string>fonts/SimpleLineIcons.ttf</string>
-			<string>fonts/Zocial.ttf</string>
-			<string>fonts/Poppins-Black.ttf</string>
-			<string>fonts/Poppins-BlackItalic.ttf</string>
-			<string>fonts/Poppins-Bold.ttf</string>
-			<string>fonts/Poppins-BoldItalic.ttf</string>
-			<string>fonts/Poppins-ExtraBold.ttf</string>
-			<string>fonts/Poppins-ExtraBoldItalic.ttf</string>
-			<string>fonts/Poppins-ExtraLight.ttf</string>
-			<string>fonts/Poppins-ExtraLightItalic.ttf</string>
-			<string>fonts/Poppins-Italic.ttf</string>
-			<string>fonts/Poppins-Light.ttf</string>
-			<string>fonts/Poppins-LightItalic.ttf</string>
-			<string>fonts/Poppins-Medium.ttf</string>
-			<string>fonts/Poppins-MediumItalic.ttf</string>
-			<string>fonts/Poppins-Regular.ttf</string>
-			<string>fonts/Poppins-SemiBold.ttf</string>
-			<string>fonts/Poppins-SemiBoldItalic.ttf</string>
-			<string>fonts/Poppins-Thin.ttf</string>
-			<string>fonts/Poppins-ThinItalic.ttf</string>
-		</array>
+		<string>fonts/Ionicons.ttf</string>
 		<string>fonts/FontAwesome.ttf</string>
 		<string>fonts/Foundation.ttf</string>
 		<string>fonts/MaterialCommunityIcons.ttf</string>

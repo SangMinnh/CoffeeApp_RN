@@ -30,7 +30,12 @@ static void InitializeFlipper(UIApplication *application) {
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
-
+  for (NSString *familyName in [UIFont familyNames]){
+      NSLog(@"Family name: %@", familyName);
+      for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
+          NSLog(@"--Font name: %@", fontName);
+      }
+  }
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"FoodFinder"
