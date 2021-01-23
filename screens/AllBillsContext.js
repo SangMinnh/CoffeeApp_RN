@@ -4,9 +4,11 @@ import axios from 'axios';
 const billReducer = (allBillsState, action) => {
     switch (action.type) {
         case 'get_all_bills':
-            return action.payload;
+            return action.payload.filter(item => item.status !== 'Payed');
         case 'get_bills':
             return action.payload;
+        // case 'confirm_payment':
+        //     return action.payload;
         default:
             return allBillsState;
     }
@@ -67,10 +69,35 @@ const getAllBills = dispatch => {
         }
 
     };
+    // return (response) => {
+
+    //     dispatch({ type: 'get_all_bills', payload: response });
+
+
+    // };
+
+};
+
+const confirmPayment = dispatch => {
+    return async (bill, callback) => {
+        try {
+            const response = await axios.put('https://uitmobile.herokuapp.com/api/foodscart/edit', { ...bill, status: 'Payed' });
+            //console.log('aaaaaaaaaaaaaa', response.data);
+            // await dispatch({ type: 'confirm_payment', payload: { ...bill, status: 'Payed' } });
+            if (callback) {
+                callback();
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+
+
+    };
 };
 
 export const { Context, Provider } = createDataContext(
     billReducer,
-    { getAllBills, addNewBill },
+    { getAllBills, addNewBill, confirmPayment },
     []
 );

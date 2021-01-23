@@ -44,8 +44,8 @@ const MainTabScreen = () => {
   const { colors } = useTheme();
   return (
     <FoodProvider>
-      <BillsProvider>
-        <CartProvider>
+      <CartProvider>
+        <BillsProvider>
           <Tab.Navigator initialRouteName="Home"
             //labeled={false}
             activeTintColor='#27dd06'
@@ -147,8 +147,8 @@ const MainTabScreen = () => {
             />
 
           </Tab.Navigator >
-        </CartProvider>
-      </BillsProvider>
+        </BillsProvider>
+      </CartProvider>
     </FoodProvider>)
 };
 

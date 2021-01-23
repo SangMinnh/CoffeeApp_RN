@@ -19,7 +19,7 @@ const BillDetailScreen = ({ navigation, route }) => {
     const { colors } = useTheme();
     const theme = useTheme();
     const id = route.params.id;
-    const { state } = useContext(BillsContext);
+    const { state, confirmPayment } = useContext(BillsContext);
     const bill = state.find(selectedBill => selectedBill.idCart === id);
     const d = new Date();
     const n = d.toLocaleString();
@@ -61,11 +61,13 @@ const BillDetailScreen = ({ navigation, route }) => {
                             <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Bill ID:  </Text>
                             <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Table:  </Text>
                             <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Time:  </Text>
+                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Status:  </Text>
                         </View>
                         <View>
                             <Text style={[styles.textHeader, { color: colors.text }]}>{bill.idCart}</Text>
                             <Text style={[styles.textHeader, { color: colors.text }]}>#{bill.table}</Text>
                             <Text style={[styles.textHeader, { color: colors.text }]}>{bill.time}</Text>
+                            <Text style={[styles.textHeader, { color: colors.text }]}>{bill.status}</Text>
                         </View>
                     </View>
                     <View style={[styles.headerDetail, { paddingTop: 10 }]}>
@@ -119,12 +121,15 @@ const BillDetailScreen = ({ navigation, route }) => {
                     </View>
                     <TouchableOpacity style={styles.payTouch}
                         onPress={() => {
-                            navigation.pop();
-                            showMessage({
-                                message: `Awesome! Payment Successful!`,
-                                type: "success",
-                                icon: 'success'
-                            });
+                            confirmPayment(bill, () => {
+                                // navigation.pop();
+                                showMessage({
+                                    message: `Awesome! Payment Successful!`,
+                                    type: "success",
+                                    icon: 'success'
+                                });
+                            })
+
                         }}>
                         <Text style={styles.payText}>CONFIRM PAYMENT</Text>
                     </TouchableOpacity>

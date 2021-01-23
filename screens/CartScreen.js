@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { VirtualizedList, View, Text, Image, StyleSheet, Dimensions, StatusBar, Platform, TouchableOpacity, FlatList, DatePickerAndroid, SafeAreaView } from 'react-native'
+import { VirtualizedList, Modal, View, Text, Image, StyleSheet, Dimensions, StatusBar, Platform, TouchableOpacity, FlatList, DatePickerAndroid, SafeAreaView } from 'react-native'
 const W = Dimensions.get('window').width;
 import { FoodsCart } from '../model/data';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -16,7 +16,7 @@ import Animated, { color } from 'react-native-reanimated';
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-
+import Feather from 'react-native-vector-icons/Feather';
 
 
 function FocusAwareStatusBar(props) {
@@ -27,7 +27,7 @@ function FocusAwareStatusBar(props) {
 
 
 export default function CartScreen({ navigation }) {
-
+    const [modalVisible, setModalVisible] = useState(false);
     const { state, deleteItem, handleItemAmount, clearCart } = useContext(CartContext);
     const { addNewBill } = useContext(BillsContext);
 
@@ -258,7 +258,7 @@ export default function CartScreen({ navigation }) {
             </View>
         </View>
     );
-
+    const [table, setTable] = useState('');
     return (
         <SafeAreaView style={styles.container}>
 
@@ -273,7 +273,69 @@ export default function CartScreen({ navigation }) {
                 enabledGestureInteraction={true}
             />
             <View>
-                <Text style={[styles.textOderList, { color: colors.text }]}>Order List</Text>
+
+                {/* <View style={[styles.textInputView, { backgroundColor: colors.card }]}>
+                    <Text style={[styles.textInput, {
+                        color: colors.text
+                    }]}>Dilivery to Table: </Text>
+                    <TextInput placeholder=''
+                        placeholderTextColor={colors.text}
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none">
+
+                    </TextInput>
+                </View> */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+
+
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={[styles.modalView, { backgroundColor: colors.card }]}>
+                            {/* <Text style={styles.modalText}>Dilivery to Table</Text> */}
+                            <TextInput keyboardType="number-pad"
+                                value={table}
+                                onChangeText={table => setTable(table)}
+                                onEndEditing={() => {
+                                    setModalVisible(!modalVisible);
+                                    setFoodCartNow({ ...foodCartNow, table: Number(table) })
+                                    // console.log(typeof (Number(table)))
+                                    //console.log('ssssssssxxxss', foodCartNow)
+                                }}
+                                placeholder="Table" style={{ width: 100, fontSize: 25, }}></TextInput>
+                            {/* <TouchableOpacity
+                                style={{ ...styles.openButton, width: 130, borderRadius: 25, justifyContent: 'center', height: 50, backgroundColor: '#ffa800' }}
+                                onPress={() => {
+
+                                   
+                                    console.log('ssssssssss', foodCartNow)
+
+                                }}
+                            >
+                                <Text style={styles.textStyle}>CONFIRM</Text>
+                            </TouchableOpacity> */}
+                        </View>
+                    </View>
+                </Modal>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
+                    <Text style={[styles.textOderList, { color: colors.text, }]}>Order List</Text>
+                    <TouchableOpacity onPress={() => {
+                        setModalVisible(true);
+                    }} style={{ justifyContent: 'center', paddingHorizontal: 10, marginRight: 25 }}>
+                        <Feather name="sliders"
+                            color={colors.text}
+                            size={28} />
+                    </TouchableOpacity>
+
+                </View>
+
 
                 <FlatList style={{ marginBottom: 80 }}
                     data={cartItemList}
@@ -292,7 +354,28 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    textInputView: {
+        flexDirection: 'row',
+        marginTop: 20,
+        backgroundColor: '#ffffff',
+        marginHorizontal: 25,
+        borderRadius: 15,
+        height: 55,
 
+    },
+    textInputViewIcon: {
+        alignSelf: 'center',
+        marginHorizontal: 15
+    },
+    textInput: {
+        flex: 1,
+        paddingLeft: 0,
+        fontFamily: 'Poppins',
+        color: '#373737',
+        fontSize: 16,
+        textAlignVertical: 'center'
+
+    },
     foodViewBox: {
         flexDirection: 'row',
         backgroundColor: '#FFFFFF',
@@ -436,5 +519,41 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        width: W * 0.6,
+        //height: 200,
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
 
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+        fontSize: 18,
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: 'bold',
+
+    }
 });

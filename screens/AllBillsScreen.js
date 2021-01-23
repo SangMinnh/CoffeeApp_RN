@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, SafeAreaView, } from 'react-native';
+import { View, ActivityIndicator, Text, Image, TextInput, FlatList, Button, StyleSheet, Dimensions, StatusBar, TouchableOpacity, SafeAreaView, } from 'react-native';
 const W = Dimensions.get('window').width;
 import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
@@ -21,9 +21,10 @@ function FocusAwareStatusBar(props) {
 const AllBillsScreen = ({ navigation }) => {
     const { state, getAllBills } = useContext(BillsContext)
     const theme = useTheme();
-
+    const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
         getAllBills();
+
 
         // const listener = navigation.addListener('didFocus', () => {
         //     getAllBills();
@@ -50,7 +51,7 @@ const AllBillsScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.boxTotal}>
                     <Text style={[styles.textStatus, { color: colors.text }]}>Status</Text>
-                    <Text style={[styles.textStatusIs, , { color: colors.text }]}>Processing</Text>
+                    <Text style={[styles.textStatusIs, , { color: colors.text }]}>{item.status}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -63,6 +64,8 @@ const AllBillsScreen = ({ navigation }) => {
             <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
             <FlatList
                 data={state}
+                // onRefresh={getAllBills()}
+                //refreshing={state.isLoading}
                 keyExtractor={bill => bill.idCart}
                 renderItem={({ item, index }) => {
                     return (
