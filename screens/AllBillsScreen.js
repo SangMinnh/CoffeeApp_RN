@@ -46,7 +46,7 @@ const AllBillsScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.boxTotal}>
                     <Text style={[styles.textTotalBill, { color: colors.text }]}>Total</Text>
-                    <Text style={[styles.textTotalNumber, , { color: colors.text }]}>${item.totalPrice}</Text>
+                    <Text style={[styles.textTotalNumber, , { color: colors.text }]}>${item.totalprice}</Text>
                 </View>
                 <View style={styles.boxTotal}>
                     <Text style={[styles.textStatus, { color: colors.text }]}>Status</Text>

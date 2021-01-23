@@ -8,12 +8,13 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   StatusBar,
+  Dimensions
 } from 'react-native';
+const W = Dimensions.get('window').width;
 import { useIsFocused } from '@react-navigation/native';
 import { TextInput, useTheme } from 'react-native-paper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import Notifications from '../model/Notifications';
 
 function FocusAwareStatusBar(props) {
@@ -24,6 +25,7 @@ function FocusAwareStatusBar(props) {
 
 const NotificationScreen = ({ navigation }) => {
   const theme = useTheme();
+  const { colors } = useTheme();
   const [listData, setListData] = useState(
     Notifications.map((NotificationItem, index) => ({
       key: `${index}`,
@@ -87,11 +89,12 @@ const NotificationScreen = ({ navigation }) => {
 
     return (
       <Animated.View
-        style={[styles.rowFront, { height: rowHeightAnimatedValue }]}>
+        style={[styles.rowFront, { height: rowHeightAnimatedValue, color: 'yellow' }]}>
         <TouchableHighlight
           style={styles.rowFrontVisible}
           onPress={() => console.log('Element touched')}
-          underlayColor={'#aaa'}>
+        //underlayColor={'#FFF'}
+        >
           <View>
             <Text style={styles.title} numberOfLines={1}>
               {data.item.title}
@@ -106,7 +109,7 @@ const NotificationScreen = ({ navigation }) => {
   };
 
   const renderItem = (data, rowMap) => {
-    const rowHeightAnimatedValue = new Animated.Value(60);
+    const rowHeightAnimatedValue = new Animated.Value(80);
 
     return (
       <VisibleItem
@@ -130,7 +133,7 @@ const NotificationScreen = ({ navigation }) => {
 
     if (rightActionActivated) {
       Animated.spring(rowActionAnimatedValue, {
-        toValue: 500,
+        toValue: W,
         useNativeDriver: false
       }).start();
     } else {
@@ -198,7 +201,7 @@ const NotificationScreen = ({ navigation }) => {
 
   const renderHiddenItem = (data, rowMap) => {
     const rowActionAnimatedValue = new Animated.Value(75);
-    const rowHeightAnimatedValue = new Animated.Value(60);
+    const rowHeightAnimatedValue = new Animated.Value(60);//60
 
     return (
       <HiddenItemWithActions
@@ -211,7 +214,7 @@ const NotificationScreen = ({ navigation }) => {
       />
     );
   };
-  const { colors } = useTheme();
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
@@ -220,7 +223,7 @@ const NotificationScreen = ({ navigation }) => {
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         leftOpenValue={75}
-        rightOpenValue={-150}
+        rightOpenValue={-150} //mở xóa
         disableRightSwipe
         onRowDidOpen={onRowDidOpen}
         leftActivationValue={100}
@@ -247,8 +250,8 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   rowFront: {
-    backgroundColor: '#a8c3ff',
-    borderRadius: 20,
+    backgroundColor: '#a8c3ff', //xanh dương
+    // borderRadius: 20,
     height: 60,
     margin: 5,
     marginBottom: 15,
@@ -261,8 +264,8 @@ const styles = StyleSheet.create({
   rowFrontVisible: {
     //backgroundColor: '#d0deff',
     backgroundColor: '#46465c',
-    borderRadius: 20,
-    height: 60,
+    //borderRadius: 20,
+    height: 80,
     padding: 10,
     marginBottom: 15,
   },
@@ -275,7 +278,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     margin: 5,
     marginBottom: 15,
-    borderRadius: 20,
+    height: 80
+    //borderRadius: 20,
   },
   backRightBtn: {
     alignItems: 'flex-end',
@@ -293,8 +297,8 @@ const styles = StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: 'red',
     right: 0,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+    // borderTopRightRadius: 20,
+    // borderBottomRightRadius: 20,
   },
   trash: {
     height: 25,

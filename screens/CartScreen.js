@@ -10,7 +10,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-share';
 import { Context as CartContext } from './FoodCartContext';
-import { Context as BillsContext } from './FoodCartContext';
+import { Context as BillsContext } from './AllBillsContext';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated, { color } from 'react-native-reanimated';
 import FlashMessage from "react-native-flash-message";
@@ -26,40 +26,70 @@ function FocusAwareStatusBar(props) {
 }
 
 
-export default function CartScreen() {
+export default function CartScreen({ navigation }) {
 
-    const { state, deleteItem, handleItemAmount } = useContext(CartContext);
+    const { state, deleteItem, handleItemAmount, clearCart } = useContext(CartContext);
     const { addNewBill } = useContext(BillsContext);
 
+    const uuidv4 = () => {
+        return 'xxx-xxx-4xx-yxx-xxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function handleConfirm() {
+        const id = uuidv4();
+        addNewBill(foodCartNow, state, id, () => {
+            clearCart()
+            navigation.pop()
+            showMessage({
+                message: `Awesome! New Bill has been Added!`,
+                type: "success",
+                icon: 'success'
+            });
+
+        })
+    }
     const CartItem = ({ item, index }) => {
         const { colors } = useTheme()
         const [itemState, setItemState] = useState(() => {
             return item;
         })
 
+
+
         function handleNowAmount(type) {
             //console.log("----FoodCartNow-------", foodCartNow)
             if (type === 'remove') {
                 let aamount = itemState.amount - 1;
-                let total = foodCartNow.totalPrice - itemState.price;
+                let total = foodCartNow.totalprice - itemState.price;
                 if (aamount != 0) {
                     const newCartItemList = [...cartItemList];
                     newCartItemList.splice(index, 1, { ...itemState, amount: aamount });
-                    setFoodCartNow({ ...foodCartNow, totalPrice: total });
+                    setFoodCartNow({ ...foodCartNow, totalprice: total });
                     setCartItemList(newCartItemList);
                     handleItemAmount(newCartItemList);
                     console.log("----NewCartItemList: ", newCartItemList)
 
                 }
-                else handleDelete();
+                else {
+                    handleDelete();
+                    navigation.pop();
+                    showMessage({
+                        message: `Your Food Cart is Empty now!`,
+                        type: "info",
+                        icon: 'warning'
+                    });
+                }
 
             }
             else {
                 let aamount = itemState.amount + 1;
-                let total = foodCartNow.totalPrice + itemState.price;
+                let total = foodCartNow.totalprice + itemState.price;
                 const newCartItemList = [...cartItemList];
                 newCartItemList.splice(index, 1, { ...itemState, amount: aamount });
-                setFoodCartNow({ ...foodCartNow, totalPrice: total });
+                setFoodCartNow({ ...foodCartNow, totalprice: total });
                 setCartItemList(newCartItemList);
                 handleItemAmount(newCartItemList);
                 console.log("----NewCartItemList: ", newCartItemList)
@@ -77,13 +107,20 @@ export default function CartScreen() {
                     icon: 'danger'
                 });
             })
-            let total = foodCartNow.totalPrice - itemState.price * itemState.amount;
+            const total = foodCartNow.totalprice - itemState.price * itemState.amount;
             const newCartItemList = [...state];
             newCartItemList.splice(index, 1);
-            setFoodCartNow({ ...foodCartNow, totalPrice: total });
+            setFoodCartNow({ ...foodCartNow, totalprice: total });
             setCartItemList(newCartItemList);
-
-            console.log("----FoodCartNow-------", foodCartNow)
+            if (total === 0) {
+                navigation.pop();
+                showMessage({
+                    message: `Your Food Cart is Empty now!`,
+                    type: "info",
+                    icon: 'warning'
+                });
+            }
+            //console.log("----FoodCartNow-------", foodCartNow)
         }
 
 
@@ -91,7 +128,7 @@ export default function CartScreen() {
             <View style={[styles.foodViewBox, { backgroundColor: colors.card }]}>
                 <View style={[styles.foodImgDetail, { backgroundColor: colors.card }]}>
                     <View style={styles.foodImageBox} >
-                        <Image style={styles.foodImage} source={require('../assets/matcha-latte.jpg')}
+                        <Image style={styles.foodImage} source={{ uri: `${itemState.image}` }}
                             resizeMode="cover" />
                     </View>
                 </View>
@@ -138,7 +175,7 @@ export default function CartScreen() {
         for (item of state) {
             total += item.price * item.amount;
         }
-        return { totalPrice: total, idCart: 'as5acawsdas', table: 1, }
+        return { totalprice: total, table: 16 }
     });
     const [cartItemList, setCartItemList] = useState(state);
     const renderCartItem = ({ item, index }) => {
@@ -148,39 +185,57 @@ export default function CartScreen() {
         );
     };
 
+    //const { addNewBill } = useContext(BillsContext);
+
+    // function handleConfirmOrder() {
+    //     const d = new Date();
+    //     const n = d.toLocaleString();
+    //     const id = Math.floor(Math.random() * 995888888562);
+    //     console.log('cccccccccccccccccccccccccccccccc', id)
+    //     setFoodCartNow({ ...foodCartNow, time: n, idcart: id, status: 'Processing' })
+
+    //     setTimeout(() => {
+    //         console.log('Bill Detail', foodCartNow);
+    //         console.log('state', state);
+    //         addNewBill(foodCartNow, state)
+    //     }, 2000)
+
+    // }
+
+    // const addNewBill = () => {
+    //     return async (foodCartNow, state) => {
+    //         try {
+    //             await axios.post('https://uitmobile.herokuapp.com/api/foodscart/post', { ...foodCartNow });
+    //             state.forEach(element => {
+    //                 axios.post('https://uitmobile.herokuapp.com/api/foodscartdetail/post',
+    //                     {
+    //                         idfcdetail: Math.floor(Math.random() * 995),
+    //                         idfoodscart: foodCartNow.idcart,
+    //                         idfood: element.id,
+    //                         amount: element.amount,
+    //                         size: element.size
+    //                     });
+    //             });
+    //         }
+    //         catch (e) {
+    //             console.log(e)
+    //         }
+    //         // if (callback) {
+    //         //     callback();
+    //         // }
+    //     };
+    // };
 
 
-    function handleConfirmOrder() {
-        // FoodsCart = { ...foodCartNow };
-        //console.log('cartnow', foodCartNow);
-        console.log('state', state);
-        console.log('Bill Detail', foodCartNow);
-        // const asyncFetch = async () => {
-        //     try {
-        //         const cart = await AsyncStorage.getItem("cartNow");
-        //         console.log("caxlozzzzz", JSON.parse(cart));
-        //     }
-        //     catch (err) {
-
-        //     }
-
-
-
-
-        // };
-
-        // asyncFetch();
-
-
-    }
     const bs = React.useRef(null);
     const fall = new Animated.Value(1);
     const renderInner = () => {
+
         return (
             <View style={styles.Total}>
                 <View style={styles.Total1}>
                     <Text style={[styles.TotalText1, { color: colors.text }]}>Item Total</Text>
-                    <Text style={[styles.TotalText1, { color: colors.text }]}>${foodCartNow.totalPrice}</Text>
+                    <Text style={[styles.TotalText1, { color: colors.text }]}>${foodCartNow.totalprice}</Text>
                 </View>
                 <View style={styles.Total1}>
                     <Text style={[styles.TotalText1, { color: colors.text }]}>Discount</Text>
@@ -188,13 +243,10 @@ export default function CartScreen() {
                 </View>
                 <View style={styles.Total1}>
                     <Text style={[styles.TotalText2, { color: colors.text }]}>Total</Text>
-                    <Text style={[styles.TotalText2, { color: colors.text }]}>${foodCartNow.totalPrice}</Text>
+                    <Text style={[styles.TotalText2, { color: colors.text }]}>${foodCartNow.totalprice}</Text>
                 </View>
                 <TouchableOpacity style={[styles.confirmBtn, { backgroundColor: colors.card }]}
-                    onPress={() => {
-                        handleConfirmOrder()
-
-                    }}>
+                    onPress={() => { handleConfirm() }}>
                     <Text style={[styles.confirmText, { color: colors.text }]}>Confirm Order</Text>
                 </TouchableOpacity>
             </View>)

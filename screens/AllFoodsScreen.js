@@ -5,6 +5,7 @@ import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { Foods } from '../model/data';
 import { Context as CartContext } from './FoodCartContext';
+import { Context as FoodContext } from './AllFoodContext';
 import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,7 +18,7 @@ import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 import { block, color } from 'react-native-reanimated';
-
+const axios = require('axios');
 function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
 
@@ -66,11 +67,13 @@ const Category = ({ item, onPress, styleBack, styleIcon }) => (
 const FoodView = ({ item, index }) => {
     const { addToCart } = useContext(CartContext);
     const { colors } = useTheme();
+    const { deleteFood } = useContext(FoodContext)
     return (
-        <TouchableOpacity style={[styles.foodViewBox, { backgroundColor: colors.card }]}>
+        <TouchableOpacity //onPress={deleteFood()} 
+            style={[styles.foodViewBox, { backgroundColor: colors.card }]}>
             <View style={styles.foodImgDetail}>
                 <View style={styles.foodImageBox} >
-                    <Image style={styles.foodImage} source={require('../assets/matcha-latte.jpg')}
+                    <Image style={styles.foodImage} source={{ uri: `${item.image}` }}
                         resizeMode="cover" />
                 </View>
                 <View style={styles.foodDetail}>
@@ -83,7 +86,7 @@ const FoodView = ({ item, index }) => {
             </View>
 
             <TouchableOpacity style={[styles.addToCcart]} onPress={() => {
-                addToCart(item.id, item.price, item.title)
+                addToCart(item.idfood, item.price, item.title, item.image)
                 showMessage({
                     message: `${item.title} has been added to your cart.`,
                     type: "success",
@@ -98,16 +101,21 @@ const FoodView = ({ item, index }) => {
 
 const AllFoodsScreen = () => {
 
+
+
     const { colors } = useTheme();
     const [selectedCategoryId, setSelectedCategoryId] = useState('All');
-    const [foodList, setFoodsList] = useState(Foods);
-    const setFoodFilter = id => {
-        if (id !== 'All') {
-            setFoodsList([...Foods.filter(e => e.category === id)])
-        }
-        else setFoodsList(Foods)
-        setSelectedCategoryId(id)
-    }
+    // const [foodList, setFoodsList] = useState(() => {
+    //     return state;
+    // });
+    const { state, getAllFood, filterFood, deleteFood } = useContext(FoodContext)
+    // const setFoodFilter = id => {
+    //     if (id !== 'All') {
+    //         filterFood([...foodList.filter(e => e.category === id)])
+    //     }
+    //     else filterFood(foodList)
+    //     setSelectedCategoryId(id)
+    // }
 
     const renderItem = ({ item }) => {
         const backgroundColor = item.id === selectedCategoryId ? "#ff8500" : colors.card;
@@ -115,7 +123,11 @@ const AllFoodsScreen = () => {
         return (
             <Category
                 item={item}
-                onPress={() => setFoodFilter(item.id)}
+                onPress={() => {
+                    filterFood(item.id)
+                    setSelectedCategoryId(item.id)
+                }
+                }
                 styleBack={{ backgroundColor }}
                 styleIcon={color}
             />
@@ -129,6 +141,10 @@ const AllFoodsScreen = () => {
 
         );
     };
+    useEffect(() => {
+        getAllFood()
+    }, []);
+
     return (
         <SafeAreaView style={styles.container}>
             <FlashMessage style={{ paddingTop: StatusBar.currentHeight }} position="bottom" />
@@ -183,9 +199,9 @@ const AllFoodsScreen = () => {
                         <Text style={[styles.resFilterText, { color: colors.text }]}>{selectedCategoryId}</Text>
                     </View>
                     <FlatList
-                        data={foodList}
+                        data={state}
                         renderItem={renderFoods}
-
+                        keyExtractor={(item) => item.idfood}
                         vertical
                         showsVerticalScrollIndicator={false}>
                     </FlatList>

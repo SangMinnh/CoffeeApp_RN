@@ -20,8 +20,10 @@ import MapTestScreen from './MapTestScreen';
 import EditProfileScreen from './EditProfileScreen';
 import { Provider as CartProvider } from './FoodCartContext';
 import { Provider as BillsProvider } from './AllBillsContext';
+import { Provider as FoodProvider } from './AllFoodContext';
 import BillDetailScreen from './BillDetailScreen';
 import { Context as CartContext } from './FoodCartContext';
+import { Context as FoodContext } from './AllFoodContext';
 import { useTheme, Avatar, Badge } from 'react-native-paper';
 import { View } from 'react-native-animatable';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -41,111 +43,113 @@ const Tab = createMaterialBottomTabNavigator();
 const MainTabScreen = () => {
   const { colors } = useTheme();
   return (
-    <BillsProvider>
-      <CartProvider>
-        <Tab.Navigator initialRouteName="Home"
-          //labeled={false}
-          activeTintColor='#27dd06'
-          inactiveTintColor='#FFD200'
-        // tabBarOptions={{
+    <FoodProvider>
+      <BillsProvider>
+        <CartProvider>
+          <Tab.Navigator initialRouteName="Home"
+            //labeled={false}
+            activeTintColor='#27dd06'
+            inactiveTintColor='#FFD200'
+          // tabBarOptions={{
 
 
-        //   // activeBackgroundColor: 'tomato',
-        //   // inactiveBackgroundColor: 'white',
-        //   showLabel: false,
-        //   labelStyle:
-        //   {
-        //     fontSize: 10
-        //   },
-        //   safeAreaInsets:
-        //   {
-        //     bottom: 10,
+          //   // activeBackgroundColor: 'tomato',
+          //   // inactiveBackgroundColor: 'white',
+          //   showLabel: false,
+          //   labelStyle:
+          //   {
+          //     fontSize: 10
+          //   },
+          //   safeAreaInsets:
+          //   {
+          //     bottom: 10,
 
-        //   },
-        //   paddingBottom: 50
+          //   },
+          //   paddingBottom: 50
 
 
-        // }}
-        >
-          <Tab.Screen
-            name="Home"
-            component={HomeStackScreen}
-            options={{
-              tabBarLabel: 'Home',
-              showLabel: false,
-              tabBarColor: '#FF6347',
-              //tabBarColor: '#fff',
-              tabBarIcon: ({ color }) => (
-                <Icon name='ios-home' color={color} size={28} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Notifications"
-            component={NotificationStackScreen}
-            options={{
-              tabBarBadge: 16,
-              tabBarLabel: 'Updates',
-              tabBarColor: '#1f65ff',
-              //tabBarColor: '#fff',
-              tabBarIcon: ({ color }) => (
-                <Icon name='ios-notifications' color={color} size={28} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="All Foods"
-            component={AllFoodsStackScreen}
-            showLabel={false}
-            options={{
-              tabBarLabel: 'New',
-              tabBarColor: '#FFA800',
-              //tabBarColor: '#fff',
+          // }}
+          >
+            <Tab.Screen
+              name="Home"
+              component={HomeStackScreen}
+              options={{
+                tabBarLabel: 'Home',
+                showLabel: false,
+                tabBarColor: '#FF6347',
+                //tabBarColor: '#fff',
+                tabBarIcon: ({ color }) => (
+                  <Icon name='ios-home' color={color} size={28} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Notifications"
+              component={NotificationStackScreen}
+              options={{
+                tabBarBadge: 16,
+                tabBarLabel: 'Updates',
+                tabBarColor: '#1f65ff',
+                //tabBarColor: '#fff',
+                tabBarIcon: ({ color }) => (
+                  <Icon name='ios-notifications' color={color} size={28} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="All Foods"
+              component={AllFoodsStackScreen}
+              showLabel={false}
+              options={{
+                tabBarLabel: 'New',
+                tabBarColor: '#FFA800',
+                //tabBarColor: '#fff',
 
-              tabBarIcon: ({ color }) => (
-                // <View style={{
-                //   borderRadius: 50,
-                //   width: 42,
-                //   height: 42,
-                //   marginTop: -10,
-                //   backgroundColor: '#27dd06',
-                //   justifyContent: 'center'
-                // }}>
+                tabBarIcon: ({ color }) => (
+                  // <View style={{
+                  //   borderRadius: 50,
+                  //   width: 42,
+                  //   height: 42,
+                  //   marginTop: -10,
+                  //   backgroundColor: '#27dd06',
+                  //   justifyContent: 'center'
+                  // }}>
 
-                // </View>
-                <Icon style={{ alignSelf: 'center' }} name='ios-add-circle-outline' color={color} size={28} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Bills"
-            component={BillsStackScreen}
-            options={{
-              tabBarLabel: 'Bills',
-              tabBarColor: '#d02860',
-              //tabBarColor: '#fff',
-              tabBarIcon: ({ color }) => (
-                <Icon name='ios-document' color={color} size={28} />
-                //tabBarColor: '#d02860',
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileStackScreen}
-            options={{
-              tabBarLabel: 'Profile',
-              tabBarColor: '#694fad',
-              // tabBarColor: '#fff',
-              tabBarIcon: ({ color }) => (
-                <Icon name='ios-person' color={color} size={28} />
-              ),
-            }}
-          />
+                  // </View>
+                  <Icon style={{ alignSelf: 'center' }} name='ios-add-circle-outline' color={color} size={28} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Bills"
+              component={BillsStackScreen}
+              options={{
+                tabBarLabel: 'Bills',
+                tabBarColor: '#d02860',
+                //tabBarColor: '#fff',
+                tabBarIcon: ({ color }) => (
+                  <Icon name='ios-document' color={color} size={28} />
+                  //tabBarColor: '#d02860',
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Profile"
+              component={ProfileStackScreen}
+              options={{
+                tabBarLabel: 'Profile',
+                tabBarColor: '#694fad',
+                // tabBarColor: '#fff',
+                tabBarIcon: ({ color }) => (
+                  <Icon name='ios-person' color={color} size={28} />
+                ),
+              }}
+            />
 
-        </Tab.Navigator >
-      </CartProvider>
-    </BillsProvider>)
+          </Tab.Navigator >
+        </CartProvider>
+      </BillsProvider>
+    </FoodProvider>)
 };
 
 export default MainTabScreen;

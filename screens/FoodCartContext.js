@@ -15,6 +15,7 @@ const cartReducer = (state, action) => {
                         id: action.payload.id,
                         title: action.payload.title,
                         price: action.payload.price,
+                        image: action.payload.image,
                         size: "M",
                         amount: 1,
                     }])
@@ -31,6 +32,10 @@ const cartReducer = (state, action) => {
         case 'handle_amount':
             {
                 return [...action.payload]
+            }
+        case 'clear_cart':
+            {
+                return [];
             }
 
 
@@ -70,56 +75,23 @@ const handleItemAmount = dispatch => {
     };
 }
 
-
+const clearCart = dispatch => {
+    return async () => {
+        dispatch({
+            type: 'clear_cart',
+        });
+    };
+}
 
 const addToCart = dispatch => {
-    return async (id, price, title) => {
-        //try {
-        //     let value = await AsyncStorage.getItem('cartNow');
-        //     if (value == null) {
-        //         value = await AsyncStorage.setItem('cartNow', JSON.stringify([{
-        //             id, price, title, size: "M",
-        //             amount: 1
-        //         }]))
-        //     }
-        //     else {
+    return async (id, price, title, image) => {
 
-        //         const index = JSON.parse(value).findIndex(x => x.id === id);
-        //         if (index < 0) {
-        //             const updatedCart = JSON.parse(value).concat([{
-        //                 id,
-        //                 title,
-        //                 price,
-        //                 size: "M",
-        //                 amount: 1,
-        //             }])
-        //             console.log('uppppNowwwwwwww', updatedCart)
-
-        //             AsyncStorage.setItem('cartNow', JSON.stringify(updatedCart))
-        //         }
-        //         else {
-
-        //         }
-
-
-        //     }
-        // }
-        // catch (err) {
-        //     console.log(err)
-        // }
-        //await jsonServer.post('/blogposts', { title, content });
-        dispatch({ type: 'add_to_cart', payload: { id, price, title } });
-
-        // if (callback) {  
-        //     callback();
-        // }
+        dispatch({ type: 'add_to_cart', payload: { id, price, title, image } });
     };
 };
 
 const deleteItem = dispatch => {
     return async (id, callback) => {
-        //await jsonServer.delete(`/blogposts/${id}`);
-
         dispatch({ type: 'delete_item', payload: id });
         if (callback) {
             callback();
@@ -127,23 +99,9 @@ const deleteItem = dispatch => {
     };
 };
 
-// const editBlogPost = dispatch => {
-//     return async (id, title, content, callback) => {
-//         await jsonServer.put(`/blogposts/${id}`, { title, content });
-
-//         dispatch({
-//             type: 'edit_blogpost',
-//             payload: { id, title, content }
-//         });
-//         if (callback) {
-//             callback();
-//         }
-//     };
-// };
 
 export const { Context, Provider } = createDataContext(
     cartReducer,
-    { addToCart, deleteItem, handleItemAmount },
-    //{ addToCart, deleteFromCart, editCartItem },
+    { addToCart, deleteItem, handleItemAmount, clearCart },
     []
 );
