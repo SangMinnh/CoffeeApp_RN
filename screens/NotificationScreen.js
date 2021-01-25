@@ -1,5 +1,5 @@
 //import { useTheme } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,8 @@ import { TextInput, useTheme } from 'react-native-paper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Notifications from '../model/Notifications';
-
+import axios from 'axios';
+import { Context as NotiContext } from './NotificationContext';
 function FocusAwareStatusBar(props) {
   const isFocused = useIsFocused();
 
@@ -24,15 +25,43 @@ function FocusAwareStatusBar(props) {
 }
 
 const NotificationScreen = ({ navigation }) => {
+  const { state, getAllNoti, deleteNoti } = useContext(NotiContext)
   const theme = useTheme();
   const { colors } = useTheme();
   const [listData, setListData] = useState(
     Notifications.map((NotificationItem, index) => ({
-      key: `${index}`,
+      keidnotificationy: `${index}`,
       title: NotificationItem.title,
       details: NotificationItem.details,
     })),
   );
+
+  const [isLoading, setIsLoading] = useState(false)
+  const onRefresh = React.useCallback(() => {
+    setIsLoading(true)
+    axios.get('http://uitmobile.herokuapp.com/api/notifications/get')
+      .then(function (response) {
+        getAllNoti(response.data)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+        setIsLoading(false)
+      });
+
+
+
+    // const listener = navigation.addListener('didFocus', () => {
+    //     getAllBills();
+    // });
+
+    // return () => {
+    //     listener.remove();
+    // };
+  }, [isLoading]);
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -42,10 +71,10 @@ const NotificationScreen = ({ navigation }) => {
 
   const deleteRow = (rowMap, rowKey) => {
     closeRow(rowMap, rowKey);
-    const newData = [...listData];
-    const prevIndex = listData.findIndex(item => item.key === rowKey);
+    const newData = [...state];
+    const prevIndex = listData.findIndex(item => item.idnotification === rowKey);
     newData.splice(prevIndex, 1);
-    setListData(newData);
+    deleteNoti(newData, rowKey);
   };
 
   const onRowDidOpen = rowKey => {
@@ -115,7 +144,7 @@ const NotificationScreen = ({ navigation }) => {
       <VisibleItem
         data={data}
         rowHeightAnimatedValue={rowHeightAnimatedValue}
-        removeRow={() => deleteRow(rowMap, data.item.key)}
+        removeRow={() => deleteRow(rowMap, data.item.idnotification)}
       />
     );
   };
@@ -209,8 +238,8 @@ const NotificationScreen = ({ navigation }) => {
         rowMap={rowMap}
         rowActionAnimatedValue={rowActionAnimatedValue}
         rowHeightAnimatedValue={rowHeightAnimatedValue}
-        onClose={() => closeRow(rowMap, data.item.key)}
-        onDelete={() => deleteRow(rowMap, data.item.key)}
+        onClose={() => closeRow(rowMap, data.item.idnotification)}
+        onDelete={() => deleteRow(rowMap, data.item.idnotification)}
       />
     );
   };
@@ -219,7 +248,10 @@ const NotificationScreen = ({ navigation }) => {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
       <SwipeListView
-        data={listData}
+        data={state}
+        keyExtractor={noti => noti.idnotification}
+        onRefresh={onRefresh}
+        refreshing={isLoading}
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         leftOpenValue={75}
@@ -306,13 +338,15 @@ const styles = StyleSheet.create({
     marginRight: 7,
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
+    marginLeft: 10,
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#fff',
   },
   details: {
-    fontSize: 12,
+    marginLeft: 10,
+    fontSize: 14,
     color: '#999',
   },
 });

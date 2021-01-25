@@ -10,7 +10,8 @@ import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { Context as BillsContext } from './AllBillsContext';
 import BillDetailScreen from './BillDetailScreen';
-
+import axios from 'axios';
+import { set } from 'react-native-reanimated';
 function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
 
@@ -19,11 +20,26 @@ function FocusAwareStatusBar(props) {
 
 
 const AllBillsScreen = ({ navigation }) => {
+    const [selected, setSelected] = useState('Pending');
     const { state, getAllBills } = useContext(BillsContext)
     const theme = useTheme();
-    const [isLoading, setIsLoading] = useState(true)
-    useEffect(() => {
-        getAllBills();
+    const [isLoading, setIsLoading] = useState(false)
+    const onRefresh = React.useCallback(() => {
+        setIsLoading(true)
+        axios.get('https://uitmobile.herokuapp.com/api/foodscart/get')
+            .then(function (response) {
+                const pen = response.data.filter(item => item.status !== 'Paid');
+                getAllBills(pen)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+                setIsLoading(false)
+            });
+
 
 
         // const listener = navigation.addListener('didFocus', () => {
@@ -33,7 +49,12 @@ const AllBillsScreen = ({ navigation }) => {
         // return () => {
         //     listener.remove();
         // };
-    }, []);
+    }, [isLoading]);
+
+    // useEffect(() => {
+    //     onRefresh()
+    //     setIsLoading(false)
+    // })
 
     const BillView = ({ item, index, onPress }) => {
         const { colors } = useTheme();
@@ -62,10 +83,18 @@ const AllBillsScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
 
             <FocusAwareStatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
-            <FlatList
+            {/* <View style={{ flexDirection: 'row', marginBottom: 15, alignSelf: 'center' }}>
+                <TouchableOpacity style={styles.filterTouch} onPress={
+
+                }></TouchableOpacity>
+                <TouchableOpacity style={styles.filterTouch} onPress={
+
+                }></TouchableOpacity>
+            </View> */}
+            <FlatList style={{ marginTop: 10 }}
                 data={state}
-                // onRefresh={getAllBills()}
-                //refreshing={state.isLoading}
+                onRefresh={onRefresh}
+                refreshing={isLoading}
                 keyExtractor={bill => bill.idCart}
                 renderItem={({ item, index }) => {
                     return (
@@ -132,6 +161,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#d02860',
         fontWeight: 'bold'
+    },
+    filterTouch: {
+        width: 100,
+        height: 50,
+        backgroundColor: '#2d2d37',
+        //borderBottomWidth: 3,
+        borderRadius: 5,
+        marginHorizontal: 2
     }
 
 

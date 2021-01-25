@@ -22,11 +22,14 @@ import {
 } from 'react-native-paper';
 import FlashMessage from "react-native-flash-message";
 import { DrawerContent } from './screens/DrawerContent';
-
+import { Provider as CartProvider } from './screens/FoodCartContext';
+import { Provider as BillsProvider } from './screens/AllBillsContext';
+import { Provider as FoodProvider } from './screens/AllFoodContext';
 import MainTabScreen from './screens/MainTabScreen';
 import SupportScreen from './screens/SupportScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import BookmarkScreen from './screens/BookmarkScreen';
+import BillDetailScreen from './screens/BillDetailScreen';
 
 import { AuthContext } from './components/context';
 
@@ -173,19 +176,22 @@ const App = () => {
   return (
     <PaperProvider theme={theme}>
       <AuthContext.Provider value={authContext}>
-        <NavigationContainer theme={theme}>
-          {loginState.userToken !== null ? (
-            <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-              <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-              <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-              <Drawer.Screen name="HistoryScreen" component={HistoryScreen} />
-              <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
-            </Drawer.Navigator>
-          )
-            :
-            <RootStackScreen />
-          }
-        </NavigationContainer>
+        <BillsProvider>
+          <NavigationContainer theme={theme}>
+            {loginState.userToken !== null ? (
+              <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+                <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+                <Drawer.Screen name="SupportScreen" component={SupportScreen} />
+                {/* <Drawer.Screen name="HistoryScreen" component={HistoryScreen} /> */}
+                <Drawer.Screen name="BillDetailScreen" component={BillDetailScreen} />
+                <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
+              </Drawer.Navigator>
+            )
+              :
+              <RootStackScreen />
+            }
+          </NavigationContainer>
+        </BillsProvider>
       </AuthContext.Provider>
       <FlashMessage position="bottom" />
     </PaperProvider>

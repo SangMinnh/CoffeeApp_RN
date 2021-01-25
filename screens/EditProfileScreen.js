@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   ImageBackground,
   TextInput,
-  StyleSheet,
+  StyleSheet, StatusBar
 } from 'react-native';
-
+import { useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,13 +18,17 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 
 import ImagePicker from 'react-native-image-crop-picker';
+function FocusAwareStatusBar(props) {
+  const isFocused = useIsFocused();
 
-const EditProfileScreen = () => {
+  return isFocused ? <StatusBar {...props} /> : null;
+}
+const EditProfileScreen = ({ navigation }) => {
 
-  const [image, setImage] = useState('https://api.adorable.io/avatars/80/abott@adorable.png');
+  const [image, setImage] = useState('https://scontent.fsgn5-2.fna.fbcdn.net/v/t1.0-1/s200x200/117109814_1496279967246909_6339453292221858445_o.jpg?_nc_cat=105&ccb=2&_nc_sid=7206a8&_nc_ohc=UJ8muZ9mDcQAX9xM--W&_nc_ht=scontent.fsgn5-2.fna&tp=7&oh=e752cc31581f22c587ab118958469d1f&oe=603395B0');
   const { colors } = useTheme();
-  bs = React.createRef();
-  fall = new Animated.Value(1);
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
       compressImageMaxWidth: 300,
@@ -65,7 +69,7 @@ const EditProfileScreen = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.panelButton}
-        onPress={() => this.bs.current.snapTo(1)}>
+        onPress={() => bs.current.snapTo(1)}>
         <Text style={styles.panelButtonTitle}>Cancel</Text>
       </TouchableOpacity>
     </View>
@@ -79,25 +83,26 @@ const EditProfileScreen = () => {
     </View>
   );
 
-
-
+  const theme = useTheme()
+  //const { colors } = useTheme()
   return (
     <View style={styles.container}>
+      <FocusAwareStatusBar translucent={true} barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.dark ? '#161622' : '#f6f6f6'} />
       <BottomSheet
-        ref={this.bs}
-        snapPoints={[330, 0]}
-        renderContent={this.renderInner}
-        renderHeader={this.renderHeader}
+        ref={bs}
+        snapPoints={[350, 0]}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
         initialSnap={1}
-        callbackNode={this.fall}
+        callbackNode={fall}
         enabledGestureInteraction={true}
       />
       <Animated.View style={{
         margin: 20,
-        opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+        opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
       }}>
-        <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
+        <View style={{ alignItems: 'center', marginBottom: 20 }}>
+          <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
             <View
               style={{
                 height: 100,
@@ -111,7 +116,7 @@ const EditProfileScreen = () => {
                   uri: image,
                 }}
                 style={{ height: 100, width: 100 }}
-                imageStyle={{ borderRadius: 15 }}>
+                imageStyle={{ borderRadius: 50 }}>
                 <View
                   style={{
                     flex: 1,
@@ -135,15 +140,15 @@ const EditProfileScreen = () => {
               </ImageBackground>
             </View>
           </TouchableOpacity>
-          <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
+          {/* <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
             John Doe
-          </Text>
+          </Text> */}
         </View>
 
         <View style={styles.action}>
-          <FontAwesome name="user-o" color={colors.text} size={20} />
+          <FontAwesome name="user-o" color={colors.text} size={25} />
           <TextInput
-            placeholder="First Name"
+            placeholder="Full Name"
             placeholderTextColor="#666666"
             autoCorrect={false}
             style={[
@@ -154,8 +159,8 @@ const EditProfileScreen = () => {
             ]}
           />
         </View>
-        <View style={styles.action}>
-          <FontAwesome name="user-o" color={colors.text} size={20} />
+        {/* <View style={styles.action}>
+          <FontAwesome name="user-o" color={colors.text} size={25} />
           <TextInput
             placeholder="Last Name"
             placeholderTextColor="#666666"
@@ -167,24 +172,10 @@ const EditProfileScreen = () => {
               },
             ]}
           />
-        </View>
+        </View> */}
+
         <View style={styles.action}>
-          <Feather name="phone" color={colors.text} size={20} />
-          <TextInput
-            placeholder="Phone"
-            placeholderTextColor="#666666"
-            keyboardType="number-pad"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View style={styles.action}>
-          <FontAwesome name="envelope-o" color={colors.text} size={20} />
+          <FontAwesome name="envelope-o" color={colors.text} size={25} />
           <TextInput
             placeholder="Email"
             placeholderTextColor="#666666"
@@ -198,8 +189,8 @@ const EditProfileScreen = () => {
             ]}
           />
         </View>
-        <View style={styles.action}>
-          <FontAwesome name="globe" color={colors.text} size={20} />
+        {/* <View style={styles.action}>
+          <FontAwesome name="globe" color={colors.text} size={25} />
           <TextInput
             placeholder="Country"
             placeholderTextColor="#666666"
@@ -211,11 +202,11 @@ const EditProfileScreen = () => {
               },
             ]}
           />
-        </View>
+        </View> */}
         <View style={styles.action}>
-          <Icon name="map-marker-outline" color={colors.text} size={20} />
+          <Icon name="map-marker-outline" color={colors.text} size={25} />
           <TextInput
-            placeholder="City"
+            placeholder="Address"
             placeholderTextColor="#666666"
             autoCorrect={false}
             style={[
@@ -226,8 +217,23 @@ const EditProfileScreen = () => {
             ]}
           />
         </View>
+        <View style={styles.action}>
+          <Feather name="phone" color={colors.text} size={25} />
+          <TextInput
+            placeholder="Phone"
+            placeholderTextColor="#666666"
+            keyboardType="number-pad"
+            autoCorrect={false}
+            style={[
+              styles.textInput,
+              {
+                color: colors.text,
+              },
+            ]}
+          />
+        </View>
         <TouchableOpacity style={styles.commandButton} onPress={() => { }}>
-          <Text style={styles.panelButtonTitle}>Submit</Text>
+          <Text style={styles.panelButtonTitle}>Save Changes</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -242,10 +248,10 @@ const styles = StyleSheet.create({
   },
   commandButton: {
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 25,
     backgroundColor: '#FF6347',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 35,
   },
   panel: {
     padding: 20,
@@ -291,14 +297,14 @@ const styles = StyleSheet.create({
   },
   panelButton: {
     padding: 13,
-    borderRadius: 10,
+    borderRadius: 25,
     backgroundColor: '#FF6347',
     alignItems: 'center',
     marginVertical: 7,
   },
   panelButtonTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '600',
     color: 'white',
   },
   action: {
@@ -319,7 +325,8 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     marginTop: Platform.OS === 'ios' ? 0 : -12,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: '#05375a',
+    fontSize: 18
   },
 });

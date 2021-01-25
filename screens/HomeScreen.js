@@ -66,7 +66,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.categoryIcon}>
             <Ionicons name="ios-restaurant" size={35} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>Restaurant</Text>
+          <Text style={styles.categoryBtnTxt}>New Menu Item</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.categoryBtn}

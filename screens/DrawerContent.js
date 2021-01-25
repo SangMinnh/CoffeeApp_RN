@@ -99,7 +99,7 @@ export function DrawerContent(props) {
                             }}
                             onPress={() => { props.navigation.navigate('BookmarkScreen') }}
                         />
-                        <DrawerItem
+                        {/* <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon
                                     name="history"
@@ -112,7 +112,7 @@ export function DrawerContent(props) {
                                 fontSize: 18
                             }}
                             onPress={() => { props.navigation.navigate('HistoryScreen') }}
-                        />
+                        /> */}
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon

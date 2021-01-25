@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 const W = Dimensions.get('window').width;
 import { View, Text, Button, StyleSheet, StatusBar, SafeAreaView, FlatList, Dimensions, } from 'react-native';
 import { Context as BillsContext } from './AllBillsContext';
@@ -7,6 +7,8 @@ import { useTheme } from 'react-native-paper';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { color } from 'react-native-reanimated';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
 
 function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
@@ -16,13 +18,28 @@ function FocusAwareStatusBar(props) {
 
 
 const BillDetailScreen = ({ navigation, route }) => {
+    const { state, getAllBills, getBill, confirmPayment } = useContext(BillsContext)
+    const [bill, setBill] = useState({})
     const { colors } = useTheme();
     const theme = useTheme();
     const id = route.params.id;
-    const { state, confirmPayment } = useContext(BillsContext);
-    const bill = state.find(selectedBill => selectedBill.idCart === id);
-    const d = new Date();
-    const n = d.toLocaleString();
+    useEffect(() => {
+        console.log(state)
+        axios.get(`https://uitmobile.herokuapp.com/api/foodscart/get`)
+            .then(function (response) {
+                const getbill = response.data.find(selectedBill => selectedBill.idCart === id);
+                console.log(getbill)
+                setBill(getbill)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+
+
+    }, []);
+    //const bill = state;
+
     const renderItem = ({ item }) => {
         return (
             <View style={[styles.headerDetail]}>
@@ -56,11 +73,11 @@ const BillDetailScreen = ({ navigation, route }) => {
                     </View>
                 </View> */}
                 <View style={[styles.boxDetail, { backgroundColor: theme.dark ? colors.card : '#f8d8e3' }]}>
-                    <View style={{ flexDirection: 'row', marginHorizontal: 28, marginVertical: 20, justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'center' }}>
                         <View>
-                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Bill ID:  </Text>
-                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Table:  </Text>
-                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Time:  </Text>
+                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Bill ID: </Text>
+                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Table:</Text>
+                            <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Time:</Text>
                             <Text style={[styles.textHeader, { color: colors.text, fontWeight: 'bold' }]}>Status:  </Text>
                         </View>
                         <View>
@@ -82,7 +99,7 @@ const BillDetailScreen = ({ navigation, route }) => {
                         vertical
                         showsHorizontalScrollIndicator={false}
                         data={bill.listItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.idfcdetail}
                         renderItem={renderItem}
                     />
 
@@ -93,7 +110,7 @@ const BillDetailScreen = ({ navigation, route }) => {
                         }} />
                         <View style={{
                             alignSelf: 'center',
-                            width: W - 60,
+                            width: W - 58,
                             borderStyle: 'dashed',
                             borderWidth: 3,
                             borderColor: colors.background
@@ -119,20 +136,27 @@ const BillDetailScreen = ({ navigation, route }) => {
                             <Text style={[styles.TotalText2, { color: colors.text }]}>${bill.totalprice} </Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.payTouch}
-                        onPress={() => {
-                            confirmPayment(bill, () => {
-                                // navigation.pop();
-                                showMessage({
-                                    message: `Awesome! Payment Successful!`,
-                                    type: "success",
-                                    icon: 'success'
-                                });
-                            })
+                    {
+                        bill.status !== 'Paid' ? <TouchableOpacity style={styles.payTouch}
+                            onPress={() => {
+                                confirmPayment(bill, () => {
+                                    navigation.pop();
+                                    showMessage({
+                                        message: `Awesome! Payment Successful!`,
+                                        type: "success",
+                                        icon: 'success'
+                                    });
+                                })
 
-                        }}>
-                        <Text style={styles.payText}>CONFIRM PAYMENT</Text>
-                    </TouchableOpacity>
+                            }}>
+                            <Text style={styles.payText}>CONFIRM PAYMENT</Text>
+                        </TouchableOpacity> :
+                            <View style={[styles.paySuccess,]}>
+                                <Icon name='checkbox-marked-circle' color='#0aff0a' size={50} />
+                                <Text style={[styles.payText, { color: colors.text, marginTop: 5 }]}>Payment successfull!</Text>
+                            </View>
+                    }
+
                 </View>
 
             </ScrollView>
@@ -168,11 +192,11 @@ const styles = StyleSheet.create({
     headerDetail: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 25,
+        paddingHorizontal: 20,
         width: W - 20
     },
     boxDetail: {
-        marginHorizontal: 10,
+        marginHorizontal: 5,
         marginTop: 15,
         paddingVertical: 20,
         borderRadius: 20,
@@ -202,6 +226,21 @@ const styles = StyleSheet.create({
         width: W * 0.7,
         borderRadius: 25,
         backgroundColor: '#d02860',
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },
+    paySuccess: {
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginBottom: 10,
+        marginTop: 20,
+        height: 60,
+        width: W * 0.75,
+        borderRadius: 25,
+        //borderWidth: 3,
+        //borderColor: '#fff',
+        //backgroundColor: '#d02860',
         justifyContent: 'center',
         alignSelf: 'center'
     },

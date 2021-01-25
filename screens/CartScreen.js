@@ -15,7 +15,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated, { color } from 'react-native-reanimated';
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
-
+import { Context as NotiContext } from './NotificationContext';
 import Feather from 'react-native-vector-icons/Feather';
 
 
@@ -30,7 +30,7 @@ export default function CartScreen({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const { state, deleteItem, handleItemAmount, clearCart } = useContext(CartContext);
     const { addNewBill } = useContext(BillsContext);
-
+    const { addNoti } = useContext(NotiContext)
     const uuidv4 = () => {
         return 'xxx-xxx-4xx-yxx-xxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -40,9 +40,10 @@ export default function CartScreen({ navigation }) {
 
     function handleConfirm() {
         const id = uuidv4();
+        addNoti(id, foodCartNow.table)
         addNewBill(foodCartNow, state, id, () => {
             clearCart()
-            navigation.pop()
+            navigation.navigate('AllFoods')
             showMessage({
                 message: `Awesome! New Bill has been Added!`,
                 type: "success",
@@ -75,12 +76,14 @@ export default function CartScreen({ navigation }) {
                 }
                 else {
                     handleDelete();
-                    navigation.pop();
-                    showMessage({
-                        message: `Your Food Cart is Empty now!`,
-                        type: "info",
-                        icon: 'warning'
-                    });
+                    if (total === 0) {
+                        navigation.navigate('AllFoods')
+                        showMessage({
+                            message: `Your Food Cart is Empty now!`,
+                            type: "info",
+                            icon: 'warning'
+                        });
+                    }
                 }
 
             }
@@ -113,7 +116,7 @@ export default function CartScreen({ navigation }) {
             setFoodCartNow({ ...foodCartNow, totalprice: total });
             setCartItemList(newCartItemList);
             if (total === 0) {
-                navigation.pop();
+                navigation.navigate('AllFoods')
                 showMessage({
                     message: `Your Food Cart is Empty now!`,
                     type: "info",
@@ -175,7 +178,7 @@ export default function CartScreen({ navigation }) {
         for (item of state) {
             total += item.price * item.amount;
         }
-        return { totalprice: total, table: 16 }
+        return { totalprice: total, table: 1 }
     });
     const [cartItemList, setCartItemList] = useState(state);
     const renderCartItem = ({ item, index }) => {
