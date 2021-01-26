@@ -42,7 +42,7 @@ const ProfileScreen = () => {
         <View style={{ flexDirection: 'row', marginTop: 15 }}>
           <Avatar.Image
             source={{
-              uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+              uri: 'https://scontent.fsgn5-2.fna.fbcdn.net/v/t1.0-1/s200x200/117109814_1496279967246909_6339453292221858445_o.jpg?_nc_cat=105&ccb=2&_nc_sid=7206a8&_nc_ohc=UJ8muZ9mDcQAX9xM--W&_nc_ht=scontent.fsgn5-2.fna&tp=7&oh=e752cc31581f22c587ab118958469d1f&oe=603395B0',
             }}
             size={80}
           />

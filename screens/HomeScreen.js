@@ -13,6 +13,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import StarRating from '../components/StarRating';
@@ -35,21 +36,21 @@ const HomeScreen = ({ navigation }) => {
           activeDotColor="#FF6347">
           <View style={styles.slide}>
             <Image
-              source={require('../assets/banners/food-banner1.jpg')}
+              source={require('../assets/banners/haha.jpg')}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
           <View style={styles.slide}>
             <Image
-              source={require('../assets/banners/food-banner2.jpg')}
+              source={require('../assets/banners/hahaha.jpg')}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
           <View style={styles.slide}>
             <Image
-              source={require('../assets/banners/food-banner3.jpg')}
+              source={require('../assets/banners/hixhix.jpg')}
               resizeMode="cover"
               style={styles.sliderImage}
             />
@@ -64,9 +65,9 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate('CardListScreen', { title: 'Restaurant' })
           }>
           <View style={styles.categoryIcon}>
-            <Ionicons name="ios-restaurant" size={35} color="#FF6347" />
+            <Feather name="edit" size={35} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>New Menu Item</Text>
+          <Text style={styles.categoryBtnTxt}>Edit Menu</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.categoryBtn}
@@ -74,39 +75,35 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate('CardListScreen', { title: 'Fastfood Center' })
           }>
           <View style={styles.categoryIcon}>
-            <MaterialCommunityIcons
-              name="food-fork-drink"
-              size={35}
-              color="#FF6347"
-            />
+            <Ionicons name="ios-add" size={50} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>Fastfood Center</Text>
+          <Text style={styles.categoryBtnTxt}>New order</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => { }}>
           <View style={styles.categoryIcon}>
-            <MaterialCommunityIcons name="food" size={35} color="#FF6347" />
+            <Ionicons name="ios-document" size={35} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>Snacks Corner</Text>
+          <Text style={styles.categoryBtnTxt}>All Bills</Text>
         </TouchableOpacity>
       </View>
       <View style={[styles.categoryContainer, { marginTop: 10 }]}>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => { }}>
           <View style={styles.categoryIcon}>
-            <Fontisto name="hotel" size={35} color="#FF6347" />
+            <MaterialCommunityIcons name="history" size={35} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>Hotels</Text>
+          <Text style={styles.categoryBtnTxt}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => { }}>
           <View style={styles.categoryIcon}>
-            <Ionicons name="md-restaurant" size={35} color="#FF6347" />
+            <Ionicons name="ios-person" size={35} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>Dineouts</Text>
+          <Text style={styles.categoryBtnTxt}>Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => { }}>
           <View style={styles.categoryIcon}>
-            <MaterialIcons name="expand-more" size={35} color="#FF6347" />
+            <Feather name="bar-chart" size={35} color="#FF6347" />
           </View>
-          <Text style={styles.categoryBtnTxt}>Show More</Text>
+          <Text style={styles.categoryBtnTxt}>Analysis</Text>
         </TouchableOpacity>
       </View>
 
@@ -206,7 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '90%',
     alignSelf: 'center',
-    marginTop: 25,
+    marginTop: 90,
     marginBottom: 10,
   },
   categoryBtn: {
